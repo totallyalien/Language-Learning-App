@@ -10,7 +10,8 @@ import 'package:animate_do/animate_do.dart';
 const Kbac = Color.fromARGB(255, 244, 244, 248);
 
 class InitPage extends StatelessWidget {
-  const InitPage({super.key});
+  late ColorScheme dync;
+  InitPage({required this.dync});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class InitPage extends StatelessWidget {
               width: MediaQuery.of(context).size.height / 3,
               decoration: BoxDecoration(
                   // color: Color.fromRGBO(7, 248, 120, 0.004),
-                  color: Color.fromARGB(146, 86, 230, 91),
+                  color: dync.onPrimary,
                   borderRadius: BorderRadius.all(Radius.circular(200))),
             ),
           ),
@@ -74,7 +75,7 @@ class InitPage extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => RegisterPage(),
+                    builder: (context) => RegisterPage(dync:this.dync),
                   ),
                 );
               },

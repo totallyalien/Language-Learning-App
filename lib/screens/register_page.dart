@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:langapp/screens/initallang.dart';
 import 'package:langapp/screens/login_page.dart';
 import 'package:langapp/utils/fire_auth.dart';
 import 'package:langapp/utils/validator.dart';
 
 class RegisterPage extends StatefulWidget {
+  late ColorScheme dync;
+  RegisterPage({required this.dync});
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
@@ -18,6 +21,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _nameTextController = TextEditingController();
   final _emailTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   final _focusName = FocusNode();
   final _focusEmail = FocusNode();
@@ -146,7 +151,9 @@ class _RegisterPageState extends State<RegisterPage> {
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => LoginPage(),
+                                  builder: (context) => LoginPage(
+                                    dync: widget.dync,
+                                  ),
                                 ),
                               );
                             },
@@ -181,12 +188,10 @@ class _RegisterPageState extends State<RegisterPage> {
             password: _passwordTextController.text,
           );
 
-
-
           if (user != null) {
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (context) => RegisterLang(user: user),
+                builder: (context) => RegisterLang(user: user,dync: widget.dync,),
               ),
               ModalRoute.withName('/'),
             );
@@ -202,7 +207,7 @@ class _RegisterPageState extends State<RegisterPage> {
         height: MediaQuery.of(context).size.height / 17,
         margin: EdgeInsets.all(8),
         decoration: BoxDecoration(
-            color: Colors.black,
+            color: widget.dync.background,
             borderRadius: BorderRadius.all(Radius.circular(5))),
         width: 150,
         child: Center(

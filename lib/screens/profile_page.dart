@@ -18,8 +18,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
+  final ColorScheme dync;
 
-  const ProfilePage({required this.user});
+  const ProfilePage({required this.user,required this.dync});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -281,13 +282,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                 _isSigningOut = true;
                               });
                               await FirebaseAuth.instance.signOut();
-                              
+
                               setState(() {
                                 _isSigningOut = false;
                               });
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
-                                  builder: (context) => LoginPage(),
+                                  builder: (context) => LoginPage(
+                                    dync: widget.dync,
+                                  ),
                                 ),
                               );
                             },

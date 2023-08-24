@@ -7,7 +7,8 @@ import 'package:lottie/lottie.dart';
 
 class ResourceDownloading extends StatefulWidget {
   late User user;
-  ResourceDownloading({required this.user});
+  late ColorScheme dync;
+  ResourceDownloading({required this.user, required this.dync});
 
   @override
   State<ResourceDownloading> createState() => _ResourceDownloadingState();
@@ -20,7 +21,10 @@ class _ResourceDownloadingState extends State<ResourceDownloading> {
     Future.delayed(Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => ProfilePage(user: widget.user),
+          builder: (context) => ProfilePage(
+            user: widget.user,
+            dync: widget.dync,
+          ),
         ),
       );
     });

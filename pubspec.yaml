@@ -41,7 +41,9 @@ dependencies:
   intl: any
   path_provider: ^2.1.0
   syncfusion_flutter_signaturepad: ^22.2.9
-
+  signature_pad: ^2.1.0+1
+  google_sign_in: ^6.1.4
+  http: ^0.13.6
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +51,7 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   hive_generator: 
   build_runner: 
+
 
 
 flutter:

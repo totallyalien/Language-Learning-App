@@ -12,8 +12,11 @@ import 'package:langapp/utils/validator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:translator/translator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
+  late ColorScheme dync;
+  LoginPage({required this.dync});
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -21,6 +24,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late Future<DocumentSnapshot> List_Data;
   GoogleTranslator translator = GoogleTranslator();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -69,18 +73,18 @@ class _LoginPageState extends State<LoginPage> {
           box.put(key.toString(), Question);
         });
 
-         SpeakingRawData.forEach((key, value) async {
-                    Question = await translatefunction(SpeakingRawData, key, translator,
-                        lang[1]);
-                    box.put(key.toString(), Question);
-
-                  });
+        SpeakingRawData.forEach((key, value) async {
+          Question = await translatefunction(
+              SpeakingRawData, key, translator, lang[1]);
+          box.put(key.toString(), Question);
+        });
       }
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => ResourceDownloading(
             user: user,
+            dync: widget.dync,
           ),
         ),
       );
@@ -198,7 +202,9 @@ class _LoginPageState extends State<LoginPage> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => RegisterPage(),
+                        builder: (context) => RegisterPage(
+                          dync: widget.dync,
+                        ),
                       ),
                     );
                   },
@@ -207,6 +213,72 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(color: Color.fromARGB(200, 139, 61, 241)),
                   )),
             ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height / 6,
+          ),
+          GestureDetector(
+            onTap: () async {
+              signInWithGoogle().then((value) {
+                print(value.additionalUserInfo);
+                if (value.user != null) {
+                  var box = Hive.box("LocalDB");
+                  CollectionReference dataBase =
+                      FirebaseFirestore.instance.collection('DataBase');
+                  CollectionReference userBase =
+                      FirebaseFirestore.instance.collection('user');
+
+                  if (box.isOpen) {
+                    userBase
+                        .doc(value.user!.email.toString())
+                        .get()
+                        .then((value) => box.put("Lang", value.data()));
+                    List_Data = dataBase.doc('English_Data').get();
+                    List_Data.then(
+                        (value) => box.put("Data_downloaded", value.data()));
+
+                    dataBase
+                        .doc('LISTENING')
+                        .get()
+                        .then((value) => box.put('SPEAKING', value.data()));
+                    Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
+
+                    box.put("Data_downloaded_check", "true");
+                    box.put("Progress", 0);
+                    Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
+                    var lang = box.get("Lang")['Selected_lang'][1];
+                    print(lang[1]);
+                    RawData.forEach((key, value) async {
+                      Question = await translatefunction(
+                          RawData, key, translator, lang[1]);
+                      box.put(key.toString(), Question);
+                    });
+
+                    SpeakingRawData.forEach((key, value) async {
+                      Question = await translatefunction(
+                          SpeakingRawData, key, translator, lang[1]);
+                      box.put(key.toString(), Question);
+                    });
+                  }
+
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => ResourceDownloading(
+                        user: value.user!,
+                        dync: widget.dync,
+                      ),
+                    ),
+                  );
+                }
+              });
+            },
+            child: Container(
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.all(Radius.circular(50))),
+                height: MediaQuery.of(context).size.height / 13,
+                child: Image.asset('assets/Google__G__Logo.svg.png')),
           )
         ],
       ),
@@ -269,18 +341,19 @@ class _LoginPageState extends State<LoginPage> {
                 box.put(key.toString(), Question);
               });
 
-
-         SpeakingRawData.forEach((key, value) async {
-                    Question = await translatefunction(SpeakingRawData, key, translator,
-                        lang[1]);
-                    box.put(key.toString(), Question);
-
-                  });
+              SpeakingRawData.forEach((key, value) async {
+                Question = await translatefunction(
+                    SpeakingRawData, key, translator, lang[1]);
+                box.put(key.toString(), Question);
+              });
             }
 
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (context) => ResourceDownloading(user: user),
+                builder: (context) => ResourceDownloading(
+                  user: user,
+                  dync: widget.dync,
+                ),
               ),
             );
           }
@@ -336,4 +409,18 @@ Future<List> translatefunction(RawData, key, translator, tolang) async {
     });
   }
   return TempQuestion;
+}
+
+Future<UserCredential> signInWithGoogle() async {
+  final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+  final GoogleSignInAuthentication? googleAuth =
+      await googleUser?.authentication;
+
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth?.accessToken,
+    idToken: googleAuth?.idToken,
+  );
+
+  return await FirebaseAuth.instance.signInWithCredential(credential);
 }

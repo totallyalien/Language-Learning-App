@@ -47,8 +47,8 @@ class _WritingState extends State<Writing> {
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(20))),
               child: SfSignaturePad(
-                minimumStrokeWidth: 1,
-                maximumStrokeWidth: 3,
+                minimumStrokeWidth: 3,
+                maximumStrokeWidth: 6,
                 strokeColor: Colors.blue,
                 key: _signaturePadKey,
                 backgroundColor: Colors.white,
@@ -110,3 +110,5 @@ class _WritingState extends State<Writing> {
     );
   }
 }
+
+

@@ -11,8 +11,9 @@ import 'package:translator/translator.dart';
 
 class RegisterLang extends StatefulWidget {
   final User user;
+  late ColorScheme dync;
 
-  const RegisterLang({required this.user});
+  RegisterLang({required this.user, required this.dync});
 
   @override
   _RegisterLang createState() => _RegisterLang();
@@ -137,18 +138,19 @@ class _RegisterLang extends State<RegisterLang> {
                   });
 
                   SpeakingRawData.forEach((key, value) async {
-                    Question = await translatefunction(SpeakingRawData, key, translator,
-                        LangAvail[selected][1].toString());
+                    Question = await translatefunction(SpeakingRawData, key,
+                        translator, LangAvail[selected][1].toString());
                     box.put(key.toString(), Question);
-
                   });
                 }
                 print(box.get("Numbers"));
 
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) =>
-                        ResourceDownloading(user: _currentUser),
+                    builder: (context) => ResourceDownloading(
+                      user: _currentUser,
+                      dync: widget.dync,
+                    ),
                   ),
                 );
               }

@@ -33,9 +33,19 @@ class MyApp extends StatelessWidget {
       builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
         return MaterialApp(
           title: 'LANGGG',
-          theme: ThemeData(fontFamily: 'Ubuntu'),
+          theme: ThemeData(
+              fontFamily: 'Ubuntu',
+              colorScheme: lightDynamic,
+              useMaterial3: true),
+          darkTheme: ThemeData(
+              fontFamily: 'Ubuntu',
+              colorScheme: darkDynamic,
+              brightness: Brightness.dark,
+              useMaterial3: true),
           debugShowCheckedModeBanner: false,
-          home: Splash(),
+          home: Splash(
+            dync: lightDynamic!,
+          ),
         );
       },
     );
@@ -43,24 +53,29 @@ class MyApp extends StatelessWidget {
 }
 
 class Splash extends StatefulWidget {
-  const Splash({super.key});
+  late ColorScheme dync;
+  Splash({required this.dync});
 
   @override
   SplashState createState() => new SplashState();
 }
 
 class SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
-    Future checkFirstSeen() async {
+  Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = (prefs.getBool('seen') ?? false);
 
     if (_seen) {
-      Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => LoginPage()));
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(
+          builder: (context) => LoginPage(
+                dync: widget.dync,
+              )));
     } else {
       await prefs.setBool('seen', true);
-      Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => InitPage()));
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(
+          builder: (context) => InitPage(
+                dync: widget.dync,
+              )));
     }
   }
 
@@ -70,9 +85,8 @@ class SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: new Center(
-        child: new Text("🐼 🐼 🐼")
-      ),
+      backgroundColor: widget.dync.tertiaryContainer,
+      body: new Center(child: new Text("🐼 🐼 🐼")),
     );
   }
 }
