@@ -1,0 +1,69 @@
+name: langapp
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=2.19.4 <3.0.0'
+
+dependencies:
+  after_layout: ^1.2.0
+  dynamic_color: ^1.6.6
+  firebase_auth: ^4.7.2
+  firebase_core: ^2.15.0
+  flutter:
+    sdk: flutter
+  google_fonts: ^4.0.4
+  shared_preferences: ^2.2.0
+  smooth_page_indicator: ^1.1.0
+  animated_text_kit: ^4.2.2
+  cloud_firestore: ^4.8.4
+  animate_do: ^3.0.2
+  google_nav_bar: ^5.0.6
+  hand_signature: ^3.0.1
+  flutter_signature_pad: ^3.0.1
+  path_drawing: ^1.0.1
+  flutter_staggered_grid_view: ^0.7.0
+  glassmorphism: ^3.0.0
+  percent_indicator: ^4.2.3
+  translator: ^0.1.7
+  hive: ^2.2.3
+  hive_flutter: 
+  google_mlkit_text_recognition: ^0.10.0
+  lottie: ^2.3.2
+  webview_flutter: ^4.2.2
+  text_to_speech: ^0.2.3
+  speech_to_text: ^6.1.1
+  permission_handler: ^10.4.3
+  flutter_tts: ^3.7.0
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  path_provider: ^2.1.0
+  syncfusion_flutter_signaturepad: ^22.2.9
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  hive_generator: 
+  build_runner: 
+
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+  fonts:
+    - family: Ubuntu
+      fonts:
+        - asset: assets/UbuntuMono-Regular.ttf
+    - family: Mona
+      fonts:
+        - asset: assets/Montserrat-VariableFont_wght.ttf
+
+
+
+
+        # 
