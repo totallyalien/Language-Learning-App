@@ -111,38 +111,38 @@ class _ImageUploadsState extends State<ImageUploads> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    _showPicker(context);
-                  },
-                  child: widget.dphoto != null
-                      ? Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: ClipRRect(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(100)),
-                              child: Image.memory(
-                                widget.dphoto,
-                                fit: BoxFit.cover,
+                    onTap: () {
+                      _showPicker(context);
+                    },
+                    child: widget.dphoto != null
+                        ? Container(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(100)),
+                                child: Image.memory(
+                                  widget.dphoto,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          height: MediaQuery.of(context).size.height / 6,
-                          width: MediaQuery.of(context).size.height / 6,
-                        )
-                      : Container(
-                          decoration: BoxDecoration(
-                            color: widget.dync.inversePrimary,
-                            borderRadius: BorderRadius.all(Radius.circular(50)),
-                          ),
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.height / 3,
-                          child: Icon(
-                            Icons.camera_alt,
-                            color: Colors.grey[800],
-                          ),
-                        ),
-                ),
+                            height: MediaQuery.of(context).size.height / 6,
+                            width: MediaQuery.of(context).size.height / 6,
+                          )
+                        : Container(
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(100)),
+                                  child: Container(
+                                      color: widget.dync.primary,
+                                      child: Icon(Icons.camera_alt))),
+                            ),
+                            height: MediaQuery.of(context).size.height / 6,
+                            width: MediaQuery.of(context).size.height / 6,
+                          )),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,

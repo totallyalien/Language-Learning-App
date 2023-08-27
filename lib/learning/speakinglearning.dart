@@ -83,14 +83,16 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
   }
 
   void _startListening() async {
+    _speechToText.initialize();
     await _speechToText.listen(
       onResult: _onSpeechResult,
       listenFor: const Duration(seconds: 10),
-      localeId: "en_En",
+      localeId: trcode[lang_code].toString(),
       cancelOnError: false,
       partialResults: false,
       listenMode: ListenMode.dictation,
     );
+    print(_speechToText.isListening);
   }
 
   /// listen method.
@@ -102,38 +104,26 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() async {
       _lastWords = "$_lastWords${result.recognizedWords} ";
-
-      Translation testext =
-          await translator.translate(_lastWords, to: lang_code);
-      print(testext.text);
-      _textController.text = testext.text;
-    });
-
-    bool custom_compare(String ques, String ans) {
-      int count = 0;
-      bool con = false;
-      for (int i = 0; i < ans.length; i++) {
-        if (ques.contains(ans[i])) {
-          count++;
-        }
-        if (count > ques.length - 4) {
-          con = true;
-        }
+      // Translation testext =
+      //     await translator.translate(_lastWords, to: lang_code);
+      print(_lastWords);
+      print(Questions[x][1]);
+      bool aa = custom_compare(Questions[x][1], _lastWords);
+      print(aa);
+      if (aa) {
+        print("valid");
+        setState(() {
+          if (Progress == 1.0) {
+            Navigator.pop(context);
+          }
+          x += 1;
+          Progress += 0.2;
+          _lastWords = "";
+        });
+      } else {
+        _textController.text = _lastWords;
       }
-      return con;
-    }
-
-    if (custom_compare(Questions[x][1], _lastWords)) {
-      print("valid");
-      setState(() {
-        if (Progress == 1.0) {
-          Navigator.pop(context);
-        }
-        x += 1;
-        Progress += 0.2;
-        _lastWords = "";
-      });
-    }
+    });
   }
 
   @override
@@ -176,6 +166,7 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
                   children: [
                     Text(
                       Questions[x][0],
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
@@ -186,6 +177,7 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
                     ),
                     Text(
                       Questions[x][1],
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           color: widget.dync.primaryContainer,
                           fontSize: 18,
@@ -195,21 +187,25 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
                 ),
               ),
               Container(
-                height: 100,
+                height: 150,
                 color: widget.dync.primary,
                 padding: EdgeInsets.all(16),
                 child: TextField(
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 30, color: Colors.red),
                   controller: _textController,
                   minLines: 6,
                   maxLines: 10,
                   decoration: InputDecoration(
+                    border: InputBorder.none,
                     filled: true,
-                    fillColor: Colors.grey.shade300,
+                    fillColor: widget.dync.primary,
                   ),
                 ),
               ),
               Container(
                   child: Text(Questions[x][0],
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 30, fontWeight: FontWeight.bold))),
               Row(
@@ -238,6 +234,7 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
+                        _textController.text = "";
                         _startListening();
                       },
                       child: Container(
@@ -280,3 +277,19 @@ Map<String, String> trcode = {
   "ta": "ta-IN",
   "ro": "ro-RO"
 };
+
+bool custom_compare(String ques, String ans) {
+  print("compare");
+  int count = 0;
+  print(ques);
+  bool con = false;
+  for (int i = 0; i < ans.length; i++) {
+    if (ques.contains(ans[i])) {
+      count++;
+    }
+    if (count > ques.length - 4) {
+      con = true;
+    }
+  }
+  return con;
+}

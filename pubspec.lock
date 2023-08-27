@@ -73,6 +73,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.10.0"
+  audio_streamer:
+    dependency: transitive
+    description:
+      name: audio_streamer
+      sha256: c5a310e4d3e622f17249f36840688304bcd62bcdfbd46189c8b3cfa6721b0a64
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -765,6 +773,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  noise_meter:
+    dependency: "direct main"
+    description:
+      name: noise_meter
+      sha256: "4b08cda3b0f8361646cd8eb13a9ed09a7e0bb947f815f23832215c0386d7271f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.0"
   package_config:
     dependency: transitive
     description:
