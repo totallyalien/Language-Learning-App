@@ -52,130 +52,136 @@ class _RegisterLang extends State<RegisterLang> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: widget.dync.inversePrimary,
         body: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          padding: EdgeInsets.only(left: 18),
-          decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.all(Radius.circular(30))),
-          height: MediaQuery.of(context).size.height / 4,
-          width: double.infinity,
-          child: Center(
-            child: Text(
-              "What would you like to learn?",
-              style: TextStyle(fontSize: 27, color: Colors.white),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height / 100,
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height / 1.55,
-          child: ListView.builder(
-              itemCount: LangAvail.length - 1,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    print(index);
-                    setState(() {
-                      selected = index;
-                      selected_cond = true;
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        border: Border.all(
-                            width: 2,
-                            color: Color.fromRGBO(31, 255, 134, 255))),
-                    margin: EdgeInsets.fromLTRB(15, 5, 15, 5),
-                    height: MediaQuery.of(context).size.height / 15,
-                    child: Center(
-                        child: Text(
-                      LangAvail[index][0],
-                      style: TextStyle(color: Colors.white),
-                    )),
-                  ),
-                );
-              }),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Visibility(
-          visible: selected_cond,
-          child: GestureDetector(
-            onTap: () async {
-              addUserdetails(
-                  LangAvail[selected], _currentUser.email.toString());
-              if (_currentUser != null) {
-                var box = Hive.box("LocalDB");
-                CollectionReference dataBase =
-                    FirebaseFirestore.instance.collection('DataBase');
-                if (box.isOpen) {
-                  List_Data = dataBase.doc('English_Data').get();
-                  List_Data.then(
-                      (value) => box.put("Data_downloaded", value.data()));
-                  dataBase
-                      .doc('LISTENING')
-                      .get()
-                      .then((value) => box.put('SPEAKING', value.data()));
-                  Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
-                  print(SpeakingRawData);
-
-                  Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
-                  box.put("Progress", 0);
-                  box.put("Lang",
-                      {'Selected_lang': LangAvail[selected], 'Progress': 0});
-
-                  RawData.forEach((key, value) async {
-                    Question = await translatefunction(RawData, key, translator,
-                        LangAvail[selected][1].toString());
-                    box.put(key.toString(), Question);
-                  });
-
-                  SpeakingRawData.forEach((key, value) async {
-                    Question = await translatefunction(SpeakingRawData, key,
-                        translator, LangAvail[selected][1].toString());
-                    box.put(key.toString(), Question);
-                  });
-                }
-                print(box.get("Numbers"));
-
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => ResourceDownloading(
-                      user: _currentUser,
-                      dync: widget.dync,
-                    ),
-                  ),
-                );
-              }
-            },
-            child: Expanded(
-              child: Container(
-                height: MediaQuery.of(context).size.height / 13,
-                width: double.infinity,
-                child: Center(
-                  child: Text(
-                    "You have selected " + LangAvail[selected][0],
-                    style: TextStyle(color: Colors.white, fontSize: 15),
-                  ),
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 18),
+              decoration: BoxDecoration(
+                  color: widget.dync.primary,
+                  borderRadius: BorderRadius.all(Radius.circular(30))),
+              height: MediaQuery.of(context).size.height / 4,
+              width: double.infinity,
+              child: Center(
+                child: Text(
+                  "What would you like to learn?",
+                  style: TextStyle(fontSize: 27, color: Colors.white),
                 ),
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30))),
               ),
             ),
-          ),
-        )
-      ],
-    ));
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 100,
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 1.55,
+              child: ListView.builder(
+                  itemCount: LangAvail.length - 1,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        print(index);
+                        setState(() {
+                          selected = index;
+                          selected_cond = true;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: widget.dync.primary,
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            border: Border.all(
+                                width: 2,
+                                color: Color.fromRGBO(31, 255, 134, 255))),
+                        margin: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        height: MediaQuery.of(context).size.height / 15,
+                        child: Center(
+                            child: Text(
+                          LangAvail[index][0],
+                          style: TextStyle(color: Colors.white),
+                        )),
+                      ),
+                    );
+                  }),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Visibility(
+              visible: selected_cond,
+              child: GestureDetector(
+                onTap: () async {
+                  addUserdetails(
+                      LangAvail[selected], _currentUser.email.toString());
+                  if (_currentUser != null) {
+                    var box = Hive.box("LocalDB");
+                    CollectionReference dataBase =
+                        FirebaseFirestore.instance.collection('DataBase');
+                    if (box.isOpen) {
+                      List_Data = dataBase.doc('English_Data').get();
+                      List_Data.then(
+                          (value) => box.put("Data_downloaded", value.data()));
+                      dataBase
+                          .doc('LISTENING')
+                          .get()
+                          .then((value) => box.put('SPEAKING', value.data()));
+                      Map<dynamic, dynamic> SpeakingRawData =
+                          box.get("SPEAKING");
+                      print(SpeakingRawData);
+
+                      Map<dynamic, dynamic> RawData =
+                          box.get("Data_downloaded");
+                      box.put("Progress", 0);
+                      box.put("Lang", {
+                        'Selected_lang': LangAvail[selected],
+                        'Progress': 0
+                      });
+
+                      RawData.forEach((key, value) async {
+                        Question = await translatefunction(RawData, key,
+                            translator, LangAvail[selected][1].toString());
+                        box.put(key.toString(), Question);
+                      });
+
+                      SpeakingRawData.forEach((key, value) async {
+                        Question = await translatefunction(SpeakingRawData, key,
+                            translator, LangAvail[selected][1].toString());
+                        box.put(key.toString(), Question);
+                      });
+                    }
+                    print(box.get("Numbers"));
+
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => ResourceDownloading(
+                          user: _currentUser,
+                          dync: widget.dync,
+                        ),
+                      ),
+                    );
+                  }
+                },
+                child: Expanded(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 13,
+                    width: double.infinity,
+                    child: Center(
+                      child: Text(
+                        "You have selected " + LangAvail[selected][0],
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                        color: widget.dync.primary,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30))),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ));
   }
 }
 

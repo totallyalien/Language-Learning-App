@@ -10,9 +10,12 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:translator/translator.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
+double height = 250;
+
 class questionsUi extends StatefulWidget {
   final String topic;
-  const questionsUi({required this.topic});
+  late ColorScheme dync;
+  questionsUi({required this.topic, required this.dync});
 
   @override
   State<questionsUi> createState() => _questionsUiState();
@@ -62,6 +65,7 @@ class _questionsUiState extends State<questionsUi> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: widget.dync.primary,
         body: Stack(children: [
           Column(
             children: [
@@ -107,10 +111,11 @@ class _questionsUiState extends State<questionsUi> {
                         flutterTts.speak(UQuestion[Randint][1]);
                       },
                       child: Container(
-                        padding: EdgeInsets.all(2),
+                        padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                            color: widget.dync.primaryContainer,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30))),
                         child: Icon(
                           Icons.audio_file,
                           color: Colors.white,
@@ -149,10 +154,11 @@ class _questionsUiState extends State<questionsUi> {
       visible: Popin_incorrect,
       child: Align(
         alignment: Alignment.bottomCenter,
-        child: Container(
+        child: AnimatedContainer(
+          duration: Duration(seconds: 2),
           height: MediaQuery.of(context).size.height / 4,
           width: double.infinity,
-          color: Colors.black,
+          color: Colors.red,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -220,7 +226,7 @@ class _questionsUiState extends State<questionsUi> {
         child: Container(
           height: MediaQuery.of(context).size.height / 4,
           width: double.infinity,
-          color: Colors.black,
+          color: Colors.green,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -278,12 +284,10 @@ class _questionsUiState extends State<questionsUi> {
       onTap: () {
         if (value == answer) {
           setState(() {
-            // answer_opition = Colors.green;
             Popin_correct = true;
           });
         } else {
           setState(() {
-            // answer_opition = Colors.red;
             Popin_incorrect = true;
           });
         }
@@ -292,10 +296,17 @@ class _questionsUiState extends State<questionsUi> {
         margin: EdgeInsets.all(8),
         width: double.infinity,
         decoration: BoxDecoration(
-            color: answer_opition,
-            border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.all(Radius.circular(5))),
-        child: Center(child: Text(value)),
+            color: widget.dync.primaryContainer,
+            border: Border.all(color: widget.dync.onPrimary),
+            borderRadius: BorderRadius.all(Radius.circular(20))),
+        child: Center(
+            child: Text(
+          value,
+          style: TextStyle(
+              color: widget.dync.secondary,
+              fontSize: 15,
+              fontWeight: FontWeight.bold),
+        )),
       ),
     ));
   }

@@ -6,60 +6,63 @@ import 'package:langapp/learning/learning.dart';
 
 class IndProgress extends StatelessWidget {
   late String data;
-  IndProgress({required this.data});
+  late ColorScheme dync;
+  IndProgress({required this.dync, required this.data});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: this.dync.onSecondaryContainer,
         body: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          child: Center(
-            child: Text(
-              data,
-              style: TextStyle(color: Colors.white, fontSize: 25),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              child: Center(
+                child: Text(
+                  data,
+                  style: TextStyle(color: this.dync.onSecondary, fontSize: 25),
+                ),
+              ),
+              height: MediaQuery.of(context).size.height / 4,
+              color: this.dync.primary,
             ),
-          ),
-          height: MediaQuery.of(context).size.height / 4,
-          color: Colors.black,
-        ),
-        Expanded(
-          child: AlignedGridView.count(
-              padding: EdgeInsets.all(8),
-              crossAxisCount: 2,
-              mainAxisSpacing: 2,
-              crossAxisSpacing: 2,
-              itemCount: Vocabulary.length,
-              itemBuilder: (context, Index) {
-                return GestureDetector(
-                  onTap: () {
-                    String temp = Vocabulary_Key[Index];
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => questionsUi(topic: temp)));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.all(10),
-                    height: MediaQuery.of(context).size.height / 5,
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    child: Center(
-                      child: Text(
-                        Vocabulary[Index],
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17),
-                        textAlign: TextAlign.center,
+            Expanded(
+              child: AlignedGridView.count(
+                  padding: EdgeInsets.all(8),
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 2,
+                  crossAxisSpacing: 2,
+                  itemCount: Vocabulary.length,
+                  itemBuilder: (context, Index) {
+                    return GestureDetector(
+                      onTap: () {
+                        String temp = Vocabulary_Key[Index];
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => questionsUi(topic: temp,dync: this.dync,)));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(10),
+                        height: MediaQuery.of(context).size.height / 5,
+                        decoration: BoxDecoration(
+                            color: this.dync.primaryContainer,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        child: Center(
+                          child: Text(
+                            Vocabulary[Index],
+                            style: TextStyle(
+                                color: this.dync.secondary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              }),
-        )
-      ],
-    ));
+                    );
+                  }),
+            )
+          ],
+        ));
   }
 }
 

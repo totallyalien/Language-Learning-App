@@ -6,7 +6,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:langapp/learning/speakinglearning.dart';
 
 class Speaking extends StatefulWidget {
-  const Speaking({super.key});
+  late ColorScheme dync;
+  Speaking({required this.dync, super.key});
 
   @override
   State<Speaking> createState() => _SpeakingState();
@@ -23,7 +24,6 @@ class _SpeakingState extends State<Speaking> {
     Speaking.forEach((key, value) {
       speakingcatg.add(key);
     });
-    
 
     super.initState();
   }
@@ -31,6 +31,7 @@ class _SpeakingState extends State<Speaking> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: widget.dync.primary,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -40,10 +41,10 @@ class _SpeakingState extends State<Speaking> {
               child: Center(
                 child: Text(
                   "Speaking",
-                  style: TextStyle(color: Colors.white, fontSize: 30),
+                  style: TextStyle(color: widget.dync.primary, fontSize: 30),
                 ),
               ),
-              color: Colors.black,
+              color: widget.dync.secondaryContainer,
               height: MediaQuery.of(context).size.height / 3.5,
             ),
           ),
@@ -55,13 +56,15 @@ class _SpeakingState extends State<Speaking> {
                   return GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              SpeakingLearning(cat: speakingcatg[index])));
+                          builder: (context) => SpeakingLearning(
+                                cat: speakingcatg[index],
+                                dync: widget.dync,
+                              )));
                     },
                     child: Container(
                         margin: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: widget.dync.primaryContainer,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(30))),
                         width: double.infinity,
@@ -69,7 +72,8 @@ class _SpeakingState extends State<Speaking> {
                         child: Center(
                           child: Text(
                             speakingcatg[index],
-                            style: TextStyle(color: Colors.white, fontSize: 18),
+                            style: TextStyle(
+                                color: widget.dync.primary, fontSize: 18),
                           ),
                         )),
                   );

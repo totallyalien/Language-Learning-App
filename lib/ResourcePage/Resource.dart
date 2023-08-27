@@ -34,6 +34,7 @@ class _ResourceDownloadingState extends State<ResourceDownloading> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: widget.dync.primary,
       body: new Center(
           child: new LottieBuilder.asset("assets/animation_llgwflgi.json")),
     );

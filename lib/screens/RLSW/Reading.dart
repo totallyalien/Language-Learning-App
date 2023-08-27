@@ -3,12 +3,19 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:langapp/learning/progress.dart';
 
-class Reading extends StatelessWidget {
-  const Reading({super.key});
+class Reading extends StatefulWidget {
+  late ColorScheme dync;
+  Reading({required this.dync, super.key});
 
+  @override
+  State<Reading> createState() => _ReadingState();
+}
+
+class _ReadingState extends State<Reading> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: widget.dync.onSecondaryContainer,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -18,10 +25,11 @@ class Reading extends StatelessWidget {
               child: Center(
                 child: Text(
                   "Reading",
-                  style: TextStyle(color: Colors.white, fontSize: 30),
+                  style:
+                      TextStyle(color: widget.dync.onSecondary, fontSize: 30),
                 ),
               ),
-              color: Colors.black,
+              color: widget.dync.primary,
               height: MediaQuery.of(context).size.height / 3.5,
             ),
           ),
@@ -33,13 +41,15 @@ class Reading extends StatelessWidget {
                   return GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              IndProgress(data: categories[index])));
+                          builder: (context) => IndProgress(
+                                data: categories[index],
+                                dync: widget.dync,
+                              )));
                     },
                     child: Container(
                         margin: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: widget.dync.primaryContainer,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(30))),
                         width: double.infinity,
@@ -47,7 +57,10 @@ class Reading extends StatelessWidget {
                         child: Center(
                           child: Text(
                             categories[index],
-                            style: TextStyle(color: Colors.white, fontSize: 18),
+                            style: TextStyle(
+                                color:widget.dync.secondary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17),
                           ),
                         )),
                   );

@@ -9,7 +9,6 @@ import 'package:langapp/screens/profile_page.dart';
 import 'package:langapp/screens/register_page.dart';
 import 'package:langapp/utils/fire_auth.dart';
 import 'package:langapp/utils/validator.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:translator/translator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -100,6 +99,7 @@ class _LoginPageState extends State<LoginPage> {
         _focusPassword.unfocus();
       },
       child: Scaffold(
+        backgroundColor: widget.dync.onPrimaryContainer,
         body: SingleChildScrollView(
           child: FutureBuilder(
             future: _initializeFirebase(),
@@ -110,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      tophead(context),
+                      tophead(context, widget.dync.primary),
                       SizedBox(
                         height: MediaQuery.of(context).size.height / 18,
                       ),
@@ -142,9 +142,9 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             margin: EdgeInsets.all(10),
             decoration: BoxDecoration(
-                color: Colors.white,
+                color: widget.dync.inversePrimary,
                 border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.all(Radius.circular(5))),
+                borderRadius: BorderRadius.all(Radius.circular(20))),
             child: TextFormField(
               controller: _emailTextController,
               focusNode: _focusEmail,
@@ -154,7 +154,8 @@ class _LoginPageState extends State<LoginPage> {
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.only(left: 15),
                   hintText: "Enter your email id",
-                  hintStyle: TextStyle(fontSize: 16),
+                  hintStyle:
+                      TextStyle(fontSize: 16, color: widget.dync.primary),
                   focusedBorder: InputBorder.none,
                   border: InputBorder.none),
               style: TextStyle(color: Colors.black),
@@ -164,9 +165,9 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             margin: EdgeInsets.all(10),
             decoration: BoxDecoration(
-                color: Colors.white,
+                color: widget.dync.inversePrimary,
                 border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.all(Radius.circular(5))),
+                borderRadius: BorderRadius.all(Radius.circular(20))),
             child: TextFormField(
               controller: _passwordTextController,
               focusNode: _focusPassword,
@@ -176,7 +177,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.only(left: 5),
-                  hintStyle: TextStyle(fontSize: 16),
+                  hintStyle:
+                      TextStyle(fontSize: 16, color: widget.dync.primary),
                   hintText: " Your Password",
                   focusedBorder: InputBorder.none,
                   border: InputBorder.none),
@@ -247,7 +249,6 @@ class _LoginPageState extends State<LoginPage> {
                     box.put("Progress", 0);
                     Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
                     var lang = box.get("Lang")['Selected_lang'][1];
-                    print(lang[1]);
                     RawData.forEach((key, value) async {
                       Question = await translatefunction(
                           RawData, key, translator, lang[1]);
@@ -275,7 +276,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Container(
                 padding: EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                    color: Colors.black,
+                    color: widget.dync.inversePrimary,
                     borderRadius: BorderRadius.all(Radius.circular(50))),
                 height: MediaQuery.of(context).size.height / 13,
                 child: Image.asset('assets/Google__G__Logo.svg.png')),
@@ -334,7 +335,6 @@ class _LoginPageState extends State<LoginPage> {
               box.put("Progress", 0);
               Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
               var lang = box.get("Lang")['Selected_lang'][1];
-              print(lang[1]);
               RawData.forEach((key, value) async {
                 Question =
                     await translatefunction(RawData, key, translator, lang[1]);
@@ -361,10 +361,10 @@ class _LoginPageState extends State<LoginPage> {
       },
       child: Container(
         height: MediaQuery.of(context).size.height / 17,
-        margin: EdgeInsets.all(8),
+        margin: EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.all(Radius.circular(5))),
+            color: widget.dync.primary,
+            borderRadius: BorderRadius.all(Radius.circular(20))),
         width: 100,
         child: Center(
           child: Text(
@@ -377,14 +377,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-Container tophead(BuildContext context) {
+Container tophead(BuildContext context, col) {
   return Container(
     padding: EdgeInsets.only(left: 20),
     height: MediaQuery.of(context).size.height / 3.4,
     width: double.infinity,
     alignment: Alignment.centerLeft,
     decoration: BoxDecoration(
-        color: Colors.black,
+        color: col,
         image: DecorationImage(
             image: AssetImage("assets/Studentbackpack.png"),
             scale: 1.4,
@@ -405,7 +405,6 @@ Future<List> translatefunction(RawData, key, translator, tolang) async {
         .translate(TempQuestion[i], to: tolang.toString())
         .then((value) {
       TempQuestion[i] = value.text;
-      print(value.toString());
     });
   }
   return TempQuestion;

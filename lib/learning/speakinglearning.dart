@@ -13,7 +13,8 @@ import 'package:translator/translator.dart';
 
 class SpeakingLearning extends StatefulWidget {
   late String cat;
-  SpeakingLearning({required this.cat});
+  late ColorScheme dync;
+  SpeakingLearning({required this.cat, required this.dync});
 
   @override
   State<SpeakingLearning> createState() => _SpeakingLearningState();
@@ -84,7 +85,7 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
   void _startListening() async {
     await _speechToText.listen(
       onResult: _onSpeechResult,
-      listenFor: const Duration(seconds: 20),
+      listenFor: const Duration(seconds: 10),
       localeId: "en_En",
       cancelOnError: false,
       partialResults: false,
@@ -102,7 +103,8 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
     setState(() async {
       _lastWords = "$_lastWords${result.recognizedWords} ";
 
-      Translation testext = await translator.translate(_lastWords, to: lang_code);
+      Translation testext =
+          await translator.translate(_lastWords, to: lang_code);
       print(testext.text);
       _textController.text = testext.text;
     });
@@ -138,6 +140,7 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: widget.dync.primary,
         body: Stack(children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -168,17 +171,15 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
               Container(
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.black),
                     borderRadius: BorderRadius.all(Radius.circular(5))),
                 child: Column(
                   children: [
                     Text(
                       Questions[x][0],
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 30,
                           fontWeight: FontWeight.bold,
-                          color: Colors.purple),
+                          color: widget.dync.onPrimary),
                     ),
                     SizedBox(
                       height: 10,
@@ -186,13 +187,16 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
                     Text(
                       Questions[x][1],
                       style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.normal),
+                          color: widget.dync.primaryContainer,
+                          fontSize: 18,
+                          fontWeight: FontWeight.normal),
                     )
                   ],
                 ),
               ),
               Container(
                 height: 100,
+                color: widget.dync.primary,
                 padding: EdgeInsets.all(16),
                 child: TextField(
                   controller: _textController,
@@ -221,12 +225,12 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
                         margin: EdgeInsets.all(15),
                         padding: EdgeInsets.all(15),
                         decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: widget.dync.primaryContainer,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         child: Icon(
                           Icons.speaker,
-                          color: Colors.white,
+                          color: widget.dync.primary,
                         ),
                       ),
                     ),
@@ -240,12 +244,12 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
                         margin: EdgeInsets.all(15),
                         padding: EdgeInsets.all(15),
                         decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: widget.dync.primaryContainer,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         child: Icon(
                           Icons.mic,
-                          color: Colors.white,
+                          color: widget.dync.primary,
                         ),
                       ),
                     ),
