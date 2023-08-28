@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:langapp/ResourcePage/null.dart';
 import 'package:langapp/progress_brain.dart/progress.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 import 'package:flutter/material.dart';

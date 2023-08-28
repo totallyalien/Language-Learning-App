@@ -23,6 +23,7 @@ class progress {
     CollectionReference userBase =
         FirebaseFirestore.instance.collection('user');
     userBase.doc(this.user!.email.toString()).set({
+      'Selected_lang': box.get("Lang")['Selected_lang'],
       'Progress': last_prog,
     });
   }
