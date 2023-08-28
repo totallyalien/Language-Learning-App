@@ -11,6 +11,7 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:translator/translator.dart';
 
+
 class SpeakingLearning extends StatefulWidget {
   late String cat;
   late ColorScheme dync;

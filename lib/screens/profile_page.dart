@@ -41,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late bool con;
   late var lang;
 
-  late Future<DocumentSnapshot> onetimebuilder;
+  // late Future<DocumentSnapshot> onetimebuilder;
   late Future<DocumentSnapshot> List_Data;
 
   @override
@@ -51,7 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
     firebase_storage.FirebaseStorage storage =
         firebase_storage.FirebaseStorage.instance;
 
-    onetimebuilder = users.doc(_currentUser.email).get();
+    // onetimebuilder = users.doc(_currentUser.email).get();
 
     Future getFile() async {
       final destination = 'files/${widget.user.email}';

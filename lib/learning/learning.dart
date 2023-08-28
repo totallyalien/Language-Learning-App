@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:langapp/ResourcePage/null.dart';
+import 'package:langapp/progress_brain.dart/progress.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -31,6 +33,7 @@ class _questionsUiState extends State<questionsUi> {
   List UQuestion = [];
   late String lang;
   late String lang_code;
+  progress prog = progress();
 
   var box = Hive.box("LocalDB");
   FlutterTts flutterTts = FlutterTts();
@@ -42,13 +45,14 @@ class _questionsUiState extends State<questionsUi> {
     lang_code = box.get("Lang")['Selected_lang'][1];
 
     Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
+
     var TempU = RawData[widget.topic];
     var i = 0;
     Question.forEach((element) {
       UQuestion.add([TempU[i], element]);
       i++;
     });
-    print(UQuestion);
+    print(UQuestion.isNotEmpty);
     Random RandomNumber = Random();
     Randint = RandomNumber.nextInt(4);
     UQuestion.shuffle();
@@ -247,8 +251,8 @@ class _questionsUiState extends State<questionsUi> {
                       Popin_correct = false;
                       if (Progress <= 0.8) {
                         Progress += 0.2;
-                        box.put("Progress", Progress);
                       } else {
+                        prog.progress_update();
                         Navigator.pop(context);
                       }
                     });
