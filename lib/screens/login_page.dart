@@ -332,7 +332,7 @@ class _LoginPageState extends State<LoginPage> {
               Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
 
               box.put("Data_downloaded_check", "true");
-              box.put("Progress", 0);
+        box.put("Progress", box.get('Lang')['Progress']);
               Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
               var lang = box.get("Lang")['Selected_lang'][1];
               RawData.forEach((key, value) async {

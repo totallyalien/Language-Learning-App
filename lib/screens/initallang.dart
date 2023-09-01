@@ -131,10 +131,10 @@ class _RegisterLang extends State<RegisterLang> {
 
                       Map<dynamic, dynamic> RawData =
                           box.get("Data_downloaded");
-                      box.put("Progress", 0);
+                      box.put("Progress", [0, 0, 0, 0]);
                       box.put("Lang", {
                         'Selected_lang': LangAvail[selected],
-                        'Progress': 0
+                        'Progress': [0, 0, 0, 0]
                       });
 
                       RawData.forEach((key, value) async {
@@ -188,7 +188,7 @@ class _RegisterLang extends State<RegisterLang> {
 Future addUserdetails(List selectedlang, String email) async {
   await FirebaseFirestore.instance.collection("user").doc(email).set({
     'Selected_lang': selectedlang,
-    'Progress': 0,
+    'Progress': [0, 0, 0, 0],
   });
 }
 

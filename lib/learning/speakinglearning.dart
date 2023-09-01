@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:langapp/progress_brain.dart/progress.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:translator/translator.dart';
-
 
 class SpeakingLearning extends StatefulWidget {
   late String cat;
@@ -33,6 +33,7 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
 
   int x = 0;
   late String lang_code;
+  progress prog = progress();
 
   @override
   void initState() {
@@ -115,6 +116,7 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
         print("valid");
         setState(() {
           if (Progress == 1.0) {
+            prog.progress_update(2);
             Navigator.pop(context);
           }
           x += 1;

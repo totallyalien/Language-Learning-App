@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:langapp/progress_brain.dart/progress.dart';
 import 'package:langapp/screens/image.dart';
 import 'package:langapp/screens/login_page.dart';
 import 'package:langapp/utils/fire_auth.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'RLSW/Reading.dart';
 import 'RLSW/Listening.dart';
 import 'RLSW/Speaking.dart';
@@ -43,9 +45,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // late Future<DocumentSnapshot> onetimebuilder;
   late Future<DocumentSnapshot> List_Data;
+  late List progress_list;
 
   @override
   void initState() {
+    progress prag = progress();
+    prag.get_firebase_progress();
+    progress_list = prag.progress_get();
     _currentUser = widget.user;
     CollectionReference users = FirebaseFirestore.instance.collection('user');
     firebase_storage.FirebaseStorage storage =
@@ -152,26 +158,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                 textAlign: TextAlign.left,
                               ),
                             ),
-                            SizedBox(
-                              height: 3,
-                            ),
                             Container(
                               child: Text(
-                                "Continue",
+                                "Continue\n${lang[0]}",
                                 style: TextStyle(
                                     fontSize: 50,
+                                    height: 1,
                                     fontWeight: FontWeight.bold,
                                     color: widget.dync.inversePrimary),
                                 textAlign: TextAlign.left,
                               ),
                             ),
-                            Text(
-                              lang[0],
-                              style: TextStyle(
-                                  fontSize: 45,
-                                  fontWeight: FontWeight.bold,
-                                  color: widget.dync.inversePrimary),
-                            )
                           ],
                         ),
                       ),
@@ -205,7 +202,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           padding: const EdgeInsets.all(14.0),
                                           child: Image.asset(GridIcon[Index]),
                                         ),
-                                        flex: 2,
+                                        flex: 3,
                                       ),
                                       Expanded(
                                         child: Text(
@@ -215,7 +212,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 15),
                                         ),
-                                      )
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(14.0),
+                                          child: LinearPercentIndicator(
+                                            animation: true,
+                                            barRadius: Radius.circular(20),
+                                            progressColor: widget.dync.primary,
+                                            percent:
+                                                (progress_list[Index]) / 50,
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   )),
                             );

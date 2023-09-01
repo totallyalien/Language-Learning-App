@@ -251,7 +251,7 @@ class _questionsUiState extends State<questionsUi> {
                       if (Progress <= 0.8) {
                         Progress += 0.2;
                       } else {
-                        prog.progress_update();
+                        prog.progress_update(0);
                         Navigator.pop(context);
                       }
                     });
