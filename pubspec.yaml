@@ -45,6 +45,7 @@ dependencies:
   google_sign_in: ^6.1.4
   image_picker: ^1.0.2
   noise_meter: ^3.2.0
+  cool_dropdown: ^2.1.0
 
 
 dev_dependencies:

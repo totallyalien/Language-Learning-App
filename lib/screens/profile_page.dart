@@ -1,11 +1,12 @@
 import 'dart:typed_data';
-
+import 'package:cool_dropdown/cool_dropdown.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:langapp/leaderboard/leaderboard.dart';
 import 'package:langapp/progress_brain.dart/progress.dart';
 import 'package:langapp/screens/image.dart';
 import 'package:langapp/screens/login_page.dart';
@@ -26,8 +27,14 @@ import 'package:image_picker/image_picker.dart';
 class ProfilePage extends StatefulWidget {
   final User user;
   final ColorScheme dync;
+  final List list_data;
+  final Map name_image;
 
-  const ProfilePage({required this.user, required this.dync});
+  const ProfilePage(
+      {required this.user,
+      required this.name_image,
+      required this.dync,
+      required this.list_data});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -121,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 icon: Icons.home,
               ),
               GButton(
-                icon: Icons.handshake,
+                icon: Icons.leaderboard,
               ),
               GButton(
                 icon: Icons.settings,
@@ -237,36 +244,10 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                child: Center(
-                    child: Text(
-                  "Assessment",
-                  style: TextStyle(fontSize: 30, color: Colors.white),
-                )),
-                height: MediaQuery.of(context).size.height / 10,
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height / 1.5,
-                child: ListView.builder(
-                    itemCount: 5,
-                    itemBuilder: ((context, index) {
-                      return Container(
-                        margin: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: Colors.white,
-                        ),
-                        height: MediaQuery.of(context).size.height / 8.5,
-                        child: Center(
-                            child: Text("Test " + (index + 1).toString())),
-                      );
-                    })),
-              )
-            ],
+          leaderboard(
+            dync: widget.dync,
+            name_image: widget.name_image,
+            list_data: widget.list_data,
           ),
           ImageUploads(
             dync: widget.dync,

@@ -221,7 +221,8 @@ class _LoginPageState extends State<LoginPage> {
           ),
           GestureDetector(
             onTap: () async {
-              signInWithGoogle().then((value) {
+              signInWithGoogle().then((value) async 
+              {
                 print(value.additionalUserInfo);
                 if (value.user != null) {
                   var box = Hive.box("LocalDB");
@@ -332,7 +333,7 @@ class _LoginPageState extends State<LoginPage> {
               Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
 
               box.put("Data_downloaded_check", "true");
-        box.put("Progress", box.get('Lang')['Progress']);
+              box.put("Progress", box.get('Lang')['Progress']);
               Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
               var lang = box.get("Lang")['Selected_lang'][1];
               RawData.forEach((key, value) async {

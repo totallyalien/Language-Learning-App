@@ -194,6 +194,7 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
                 color: widget.dync.primary,
                 padding: EdgeInsets.all(16),
                 child: TextField(
+                  enabled: false,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 30, color: Colors.red),
                   controller: _textController,

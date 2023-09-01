@@ -112,7 +112,7 @@ class _RegisterLang extends State<RegisterLang> {
               child: GestureDetector(
                 onTap: () async {
                   addUserdetails(
-                      LangAvail[selected], _currentUser.email.toString());
+                      LangAvail[selected], _currentUser.email.toString(),_currentUser.displayName.toString());
                   if (_currentUser != null) {
                     var box = Hive.box("LocalDB");
                     CollectionReference dataBase =
@@ -185,10 +185,11 @@ class _RegisterLang extends State<RegisterLang> {
   }
 }
 
-Future addUserdetails(List selectedlang, String email) async {
+Future addUserdetails(List selectedlang, String email,String name) async {
   await FirebaseFirestore.instance.collection("user").doc(email).set({
     'Selected_lang': selectedlang,
     'Progress': [0, 0, 0, 0],
+    'name':name
   });
 }
 

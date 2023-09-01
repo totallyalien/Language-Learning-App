@@ -64,7 +64,7 @@ class _ImageUploadsState extends State<ImageUploads> {
 
   Future uploadFile() async {
     if (_photo == null) return;
-    final destination = 'files/${widget.user.email}';
+    final destination = 'files/${widget.user.email!.toLowerCase().toString()}';
     print("DESTTTTT" + destination);
 
     try {
