@@ -29,7 +29,6 @@ dependencies:
   translator: ^0.1.7
   hive: ^2.2.3
   hive_flutter: 
-  google_mlkit_text_recognition: ^0.10.0
   lottie: ^2.3.2
   webview_flutter: ^4.2.2
   text_to_speech: ^0.2.3
@@ -46,6 +45,17 @@ dependencies:
   image_picker: ^1.0.2
   noise_meter: ^3.2.0
   cool_dropdown: ^2.1.0
+  blobs: ^2.0.0
+  provider: ^6.0.5
+  get: ^4.6.5
+  line_icons: ^2.0.3
+  url_launcher: ^6.1.11
+  flutter_tesseract_ocr: ^0.4.23
+  timeago: ^3.3.0
+  flutter_fgbg: ^0.3.0
+  http: ^0.13.6
+  google_vision: ^1.0.7+7
+  flutter_svg: ^2.0.5
 
 
 dev_dependencies:
@@ -60,13 +70,13 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/tessdata/
+    - assets/flag/
   fonts:
     - family: Ubuntu
       fonts:
         - asset: assets/UbuntuMono-Regular.ttf
-    - family: Mona
-      fonts:
-        - asset: assets/Montserrat-VariableFont_wght.ttf
+
 
 
 

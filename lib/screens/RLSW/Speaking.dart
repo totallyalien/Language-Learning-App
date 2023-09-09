@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:langapp/learning/speakinglearning.dart';
+import 'package:langapp/progress_brain.dart/progress.dart';
 
 class Speaking extends StatefulWidget {
   late ColorScheme dync;
@@ -15,6 +16,7 @@ class Speaking extends StatefulWidget {
 
 class _SpeakingState extends State<Speaking> {
   List<String> speakingcatg = [];
+  progress prog = progress();
 
   @override
   void initState() {
@@ -55,27 +57,62 @@ class _SpeakingState extends State<Speaking> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SpeakingLearning(
-                                cat: speakingcatg[index],
-                                dync: widget.dync,
-                              )));
+                      !(index <= prog.progress_get()[2])
+                          ? {}
+                          : Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: (context) => SpeakingLearning(
+                                        cat: speakingcatg[index],
+                                        dync: widget.dync,
+                                      )));
                     },
-                    child: Container(
-                        margin: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: widget.dync.primaryContainer,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(30))),
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height / 10,
-                        child: Center(
-                          child: Text(
-                            speakingcatg[index],
-                            style: TextStyle(
-                                color: widget.dync.primary, fontSize: 18),
+                    child: (index <= prog.progress_get()[2])
+                        ? Container(
+                            margin: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: widget.dync.primaryContainer,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(30))),
+                            width: double.infinity,
+                            height: MediaQuery.of(context).size.height / 10,
+                            child: Center(
+                              child: Text(
+                                speakingcatg[index],
+                                style: TextStyle(
+                                    color: widget.dync.primary, fontSize: 18),
+                              ),
+                            ))
+                        : Stack(
+                            children: [
+                              Container(
+                                  margin: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: widget.dync.primaryContainer,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(30))),
+                                  width: double.infinity,
+                                  height:
+                                      MediaQuery.of(context).size.height / 10,
+                                  child: Center(
+                                    child: Text(
+                                      speakingcatg[index],
+                                      style: TextStyle(
+                                          color: widget.dync.primary,
+                                          fontSize: 18),
+                                    ),
+                                  )),
+                              Container(
+                                  margin: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: widget.dync.primaryContainer,
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(30))),
+                                  width: double.infinity,
+                                  height:
+                                      MediaQuery.of(context).size.height / 10,
+                                  child: Center(child: Icon(Icons.lock))),
+                            ],
                           ),
-                        )),
                   );
                 }),
           ),

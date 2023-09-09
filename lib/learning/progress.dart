@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:langapp/learning/learning.dart';
 import 'package:langapp/progress_brain.dart/progress.dart';
+import 'package:provider/provider.dart';
 
 List<String> Vocabulary = [
   "Basic words",
@@ -62,17 +63,18 @@ class _IndProgressState extends State<IndProgress> {
                   itemBuilder: (context, Index) {
                     return GestureDetector(
                       onTap: () {
-                        prog.progress_get()[0] <= Index
+                        !(Index <= prog.progress_get()[0])
                             ? {print("nothing")}
                             : {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => questionsUi(
-                                          topic: Vocabulary_Key[Index],
-                                          dync: widget.dync,
-                                        )))
+                                Navigator.of(context)
+                                    .pushReplacement(MaterialPageRoute(
+                                        builder: (context) => questionsUi(
+                                              topic: Vocabulary_Key[Index],
+                                              dync: widget.dync,
+                                            )))
                               };
                       },
-                      child: prog.progress_get()[0] <= Index
+                      child: !(Index <= prog.progress_get()[0])
                           ? Stack(
                               children: [
                                 Container(
@@ -101,14 +103,14 @@ class _IndProgressState extends State<IndProgress> {
                                     height:
                                         MediaQuery.of(context).size.height / 5,
                                     decoration: BoxDecoration(
-                                        color: widget.dync.tertiary,
+                                        color: widget.dync.primaryContainer,
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(20))),
                                     child: Center(
                                         child: Icon(
                                       Icons.lock,
                                       size: 30,
-                                      color: widget.dync.primaryContainer,
+                                      color: widget.dync.primary,
                                     )),
                                   ),
                                 ),

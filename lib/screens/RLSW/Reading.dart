@@ -43,17 +43,17 @@ class _ReadingState extends State<Reading> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      prog.progress_get()[0] <= index * 6
-                          ? {}
-                          : {
+                      index <= prog.progress_get()[0] / 6
+                          ? {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => IndProgress(
                                         data: categories[index],
                                         dync: widget.dync,
                                       )))
-                            };
+                            }
+                          : {};
                     },
-                    child: prog.progress_get()[0] <= index * 6
+                    child: !(index <= prog.progress_get()[0] / 6)
                         ? Stack(
                             children: [
                               Container(

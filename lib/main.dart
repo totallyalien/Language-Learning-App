@@ -11,6 +11,7 @@ import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'screens/login_page.dart';
 import 'Splash/inital.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   await Hive.initFlutter();
@@ -45,7 +46,8 @@ class MyApp extends StatelessWidget {
               useMaterial3: true),
           debugShowCheckedModeBanner: false,
           home: Splash(
-            dync: lightDynamic!,
+            dync: lightDynamic
+            !,
           ),
         );
       },

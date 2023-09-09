@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:langapp/learning/progress.dart';
 import 'package:langapp/progress_brain.dart/progress.dart';
 import 'package:text_to_speech/text_to_speech.dart';
 import 'package:flutter/material.dart';
@@ -40,12 +41,13 @@ class _questionsUiState extends State<questionsUi> {
   @override
   void initState() {
     Question = box.get(widget.topic);
-    lang = box.get("Lang")['Selected_lang'][0];
-    lang_code = box.get("Lang")['Selected_lang'][1];
+    lang = box.get("Lang")['Selected_lang']["lang1"][0];
+    lang_code = box.get("Lang")['Selected_lang']['lang1'][1];
 
     Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
 
     var TempU = RawData[widget.topic];
+    print(TempU);
     var i = 0;
     Question.forEach((element) {
       UQuestion.add([TempU[i], element]);
@@ -252,7 +254,11 @@ class _questionsUiState extends State<questionsUi> {
                         Progress += 0.2;
                       } else {
                         prog.progress_update(0);
-                        Navigator.pop(context);
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => IndProgress(
+                                  data: widget.topic,
+                                  dync: widget.dync,
+                                )));
                       }
                     });
                   },

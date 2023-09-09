@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:langapp/screens/initallang.dart';
@@ -30,8 +28,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool _isProcessing = false;
 
-  String mss = "";
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -57,10 +53,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     key: _registerFormKey,
                     child: Column(
                       children: <Widget>[
-                        Text(
-                          mss,
-                          style: TextStyle(color: Colors.red),
-                        ),
                         Container(
                           margin: EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -190,6 +182,16 @@ class _RegisterPageState extends State<RegisterPage> {
             password: _passwordTextController.text,
           );
 
+          // try {
+          //   await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          //     email: _emailTextController.text,
+          //     password: _passwordTextController.text,
+          //   );
+          // } on FirebaseAuthException catch (e) {
+          //   ScaffoldMessenger.of(context)
+          //       .showSnackBar(SnackBar(content: Text(e.code)));
+          // }
+
           if (user != null) {
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
@@ -203,7 +205,6 @@ class _RegisterPageState extends State<RegisterPage> {
           }
 
           setState(() {
-            mss = "The account already exists for that email";
             _isProcessing = false;
           });
         }

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:langapp/ResourcePage/Resource.dart';
+import 'package:langapp/ResourcePage/resourcedownloading.dart';
 import 'package:langapp/screens/profile_page.dart';
 import 'package:langapp/screens/register_page.dart';
 import 'package:langapp/utils/fire_auth.dart';
@@ -21,8 +22,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late Future<DocumentSnapshot> List_Data;
-  GoogleTranslator translator = GoogleTranslator();
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   final _formKey = GlobalKey<FormState>();
@@ -34,51 +33,22 @@ class _LoginPageState extends State<LoginPage> {
   final _focusPassword = FocusNode();
 
   bool _isProcessing = false;
+  ResourceBrainLogin resourcebrain = ResourceBrainLogin();
 
-  late List<dynamic> Question;
-
-  String mss = "";
+  Future<void> displayMessage(String message) async {
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(message),
+            ));
+  }
 
   Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      var box = Hive.box("LocalDB");
-      CollectionReference dataBase =
-          FirebaseFirestore.instance.collection('DataBase');
-      CollectionReference userBase =
-          FirebaseFirestore.instance.collection('user');
-
-      if (box.isOpen) {
-        userBase
-            .doc(user.email.toString())
-            .get()
-            .then((value) => box.put("Lang", value.data()));
-        List_Data = dataBase.doc('English_Data').get();
-        List_Data.then((value) => box.put("Data_downloaded", value.data()));
-
-        dataBase
-            .doc('LISTENING')
-            .get()
-            .then((value) => box.put('SPEAKING', value.data()));
-        Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
-        box.put("Progress", box.get('Lang')['Progress']);
-        var lang = box.get("Lang")['Selected_lang'];
-
-        Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
-        RawData.forEach((key, value) async {
-          Question = await translatefunction(RawData, key, translator, lang[1]);
-          box.put(key.toString(), Question);
-        });
-
-        SpeakingRawData.forEach((key, value) async {
-          Question = await translatefunction(
-              SpeakingRawData, key, translator, lang[1]);
-          box.put(key.toString(), Question);
-        });
-      }
-
+      resourcebrain.initadownload();
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => ResourceDownloading(
@@ -113,10 +83,6 @@ class _LoginPageState extends State<LoginPage> {
                       tophead(context, widget.dync.primary),
                       SizedBox(
                         height: MediaQuery.of(context).size.height / 18,
-                      ),
-                      Text(
-                        mss,
-                        style: TextStyle(color: Colors.red),
                       ),
                       formfield(context)
                     ],
@@ -176,10 +142,10 @@ class _LoginPageState extends State<LoginPage> {
                 password: value,
               ),
               decoration: InputDecoration(
-                  contentPadding: EdgeInsets.only(left: 5),
+                  contentPadding: EdgeInsets.only(left: 15),
                   hintStyle:
                       TextStyle(fontSize: 16, color: widget.dync.primary),
-                  hintText: " Your Password",
+                  hintText: "Your Password",
                   focusedBorder: InputBorder.none,
                   border: InputBorder.none),
               style: TextStyle(color: Colors.black),
@@ -221,48 +187,10 @@ class _LoginPageState extends State<LoginPage> {
           ),
           GestureDetector(
             onTap: () async {
-              signInWithGoogle().then((value) async 
-              {
+              signInWithGoogle().then((value) async {
                 print(value.additionalUserInfo);
                 if (value.user != null) {
-                  var box = Hive.box("LocalDB");
-                  CollectionReference dataBase =
-                      FirebaseFirestore.instance.collection('DataBase');
-                  CollectionReference userBase =
-                      FirebaseFirestore.instance.collection('user');
-
-                  if (box.isOpen) {
-                    userBase
-                        .doc(value.user!.email.toString())
-                        .get()
-                        .then((value) => box.put("Lang", value.data()));
-                    List_Data = dataBase.doc('English_Data').get();
-                    List_Data.then(
-                        (value) => box.put("Data_downloaded", value.data()));
-
-                    dataBase
-                        .doc('LISTENING')
-                        .get()
-                        .then((value) => box.put('SPEAKING', value.data()));
-                    Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
-
-                    box.put("Data_downloaded_check", "true");
-                    box.put("Progress", box.get('Lang')['Progress']);
-                    Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
-                    var lang = box.get("Lang")['Selected_lang'][1];
-                    RawData.forEach((key, value) async {
-                      Question = await translatefunction(
-                          RawData, key, translator, lang[1]);
-                      box.put(key.toString(), Question);
-                    });
-
-                    SpeakingRawData.forEach((key, value) async {
-                      Question = await translatefunction(
-                          SpeakingRawData, key, translator, lang[1]);
-                      box.put(key.toString(), Question);
-                    });
-                  }
-
+                  resourcebrain.Googledownload(value);
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => ResourceDownloading(
@@ -302,52 +230,23 @@ class _LoginPageState extends State<LoginPage> {
             email: _emailTextController.text,
             password: _passwordTextController.text,
           );
-          setState(() {
-            mss = "Account not found | Invalid credentials";
-          });
+
+          try {
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: _emailTextController.text,
+              password: _passwordTextController.text,
+            );
+          } on FirebaseAuthException catch (e) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(e.code)));
+          }
 
           setState(() {
             _isProcessing = false;
           });
 
           if (user != null) {
-            var box = Hive.box("LocalDB");
-            CollectionReference dataBase =
-                FirebaseFirestore.instance.collection('DataBase');
-            CollectionReference userBase =
-                FirebaseFirestore.instance.collection('user');
-
-            if (box.isOpen) {
-              userBase
-                  .doc(user.email.toString())
-                  .get()
-                  .then((value) => box.put("Lang", value.data()));
-              List_Data = dataBase.doc('English_Data').get();
-              List_Data.then(
-                  (value) => box.put("Data_downloaded", value.data()));
-
-              dataBase
-                  .doc('LISTENING')
-                  .get()
-                  .then((value) => box.put('SPEAKING', value.data()));
-              Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
-
-              box.put("Data_downloaded_check", "true");
-              box.put("Progress", box.get('Lang')['Progress']);
-              Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
-              var lang = box.get("Lang")['Selected_lang'][1];
-              RawData.forEach((key, value) async {
-                Question =
-                    await translatefunction(RawData, key, translator, lang[1]);
-                box.put(key.toString(), Question);
-              });
-
-              SpeakingRawData.forEach((key, value) async {
-                Question = await translatefunction(
-                    SpeakingRawData, key, translator, lang[1]);
-                box.put(key.toString(), Question);
-              });
-            }
+            resourcebrain.signindownload();
 
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
@@ -399,18 +298,6 @@ Container tophead(BuildContext context, col) {
 
 // signinbutton(context),
 
-Future<List> translatefunction(RawData, key, translator, tolang) async {
-  List TempQuestion = RawData[key];
-  for (int i = 0; i < TempQuestion.length; i++) {
-    await translator
-        .translate(TempQuestion[i], to: tolang.toString())
-        .then((value) {
-      TempQuestion[i] = value.text;
-    });
-  }
-  return TempQuestion;
-}
-
 Future<UserCredential> signInWithGoogle() async {
   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -423,4 +310,15 @@ Future<UserCredential> signInWithGoogle() async {
   );
 
   return await FirebaseAuth.instance.signInWithCredential(credential);
+}
+
+Future<void> _showToast(BuildContext context) async {
+  final scaffold = ScaffoldMessenger.of(context);
+  scaffold.showSnackBar(
+    SnackBar(
+      content: const Text('Added to favorite'),
+      action: SnackBarAction(
+          label: 'UNDO', onPressed: scaffold.hideCurrentSnackBar),
+    ),
+  );
 }

@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:langapp/progress_brain.dart/progress.dart';
+import 'package:langapp/screens/RLSW/Speaking.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -38,7 +39,7 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
   @override
   void initState() {
     var box = Hive.box("LocalDB");
-    lang_code = box.get("Lang")['Selected_lang'][1];
+    lang_code = box.get("Lang")['Selected_lang']['lang1'][1];
     List QuestionRawData = box.get(widget.cat);
     List QuestionRawDataUn = box.get('SPEAKING')[widget.cat];
     var pos = 0;
@@ -117,7 +118,10 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
         setState(() {
           if (Progress == 1.0) {
             prog.progress_update(2);
-            Navigator.pop(context);
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => Speaking(
+                      dync: widget.dync,
+                    )));
           }
           x += 1;
           Progress += 0.2;
