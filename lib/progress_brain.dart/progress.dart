@@ -8,6 +8,7 @@ class progress {
   var box = Hive.box("LocalDB");
 
   List progress_get() {
+    // print(box.get("Lang")[]);
     List last_prog = box.get("Progress");
     return last_prog;
   }

@@ -25,7 +25,7 @@ class _ResourceDownloadingState extends State<ResourceDownloading> {
   void initState() {
     // TODO: implement initState
     progress prog = progress();
-    prog.get_firebase_progress();
+    // prog.get_firebase_progress();
 
 
     Future.delayed(Duration(seconds: 2), () {

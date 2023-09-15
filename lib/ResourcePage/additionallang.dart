@@ -9,33 +9,23 @@ import 'package:langapp/screens/profile_page.dart';
 
 import '../ResourcePage/resourcedownloading.dart';
 
-class RegisterLang extends StatefulWidget {
+class AdditionalLang extends StatefulWidget {
   final User user;
   late ColorScheme dync;
+  late List langAvail;
 
-  RegisterLang({required this.user, required this.dync});
+  AdditionalLang(
+      {required this.user, required this.dync, required List langAvail});
 
   @override
-  _RegisterLang createState() => _RegisterLang();
+  _AdditionalLang createState() => _AdditionalLang();
 }
 
-class _RegisterLang extends State<RegisterLang> {
+class _AdditionalLang extends State<AdditionalLang> {
   bool _isSendingVerification = false;
   bool _isSigningOut = false;
 
   late User _currentUser;
-  List<dynamic> LangAvail = [
-    ["German", "de", "DE"],
-    ["Japanese", "ja", "JP"],
-    ["Russian", "ru", "RU"],
-    ["Korean", "ko", "KR"],
-    ["French", "fr", "PM"],
-    ["Malayalam", "ml", "IN"],
-    ["Tamil", "ta", "IN"],
-    ["Hindi", "hi", "IN"],
-    ["Kannada", "kn", "IN"],
-  ];
-
   int selected = 0;
 
   @override
@@ -101,13 +91,15 @@ class _RegisterLang extends State<RegisterLang> {
                                       onTap: () async {
                                         ResourceBrain resourcebrain =
                                             ResourceBrain();
-                                        await resourcebrain.addUserdetails(
-                                            LangAvail[selected],
-                                            _currentUser.email.toString(),
-                                            _currentUser.displayName
-                                                .toString());
-                                        if (true) {
-                                          resourcebrain.initaldownloadlang();
+
+                                        if (_currentUser != null) {
+                                          await resourcebrain.appendlang(
+                                              LangAvail[selected],
+                                              _currentUser.email.toString(),
+                                              _currentUser.displayName
+                                                  .toString());
+
+
                                           Navigator.of(context).pushReplacement(
                                             MaterialPageRoute(
                                               builder: (context) =>

@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:langapp/ResourcePage/Resource.dart';
+import 'package:langapp/ResourcePage/additionallang.dart';
 import 'package:langapp/chatroom/activity.dart';
 import 'package:langapp/leaderboard/leaderboard.dart';
 import 'package:langapp/progress_brain.dart/progress.dart';
@@ -20,6 +22,7 @@ import 'package:langapp/utils/fire_auth.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import '../ResourcePage/resourcedownloading.dart';
 import 'RLSW/Reading.dart';
 import 'RLSW/Listening.dart';
 import 'RLSW/Speaking.dart';
@@ -57,7 +60,9 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
   //dropdown
   List<CoolDropdownItem<String>> dropdownItemList = [];
 
-  List<String> pokemons = [" "];
+  List<List> pokemons = [
+    [" ", " "]
+  ];
 
   List<CoolDropdownItem<String>> pokemonDropdownItems = [];
   final pokemonDropdownController = DropdownController();
@@ -73,25 +78,32 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
 
   @override
   void initState() {
+    var box = Hive.box("LocalDB");
+    int n = box.get("current_lang");
+    lang = box.get("Lang")[n.toString()]["Selected_lang"];
+
+    for (var i = 1; i <= box.get("count_lang"); i++) {
+      pokemons.add([i, box.get("Lang")[i.toString()]["Selected_lang"][2]]);
+    }
     for (var i = 0; i < pokemons.length; i++) {
       pokemonDropdownItems.add(
         CoolDropdownItem<String>(
-            label: '${pokemons[i]}',
+            label: '${pokemons[i][1]}',
             icon: Container(
               height: 25,
               width: 25,
               child: pokemons[i] != " "
-                  ? SvgPicture.asset("assets/flag/${pokemons[i]}.svg")
+                  ? SvgPicture.asset("assets/flag/${pokemons[i][1]}.svg")
                   : Icon(
                       Icons.add,
                       color: widget.dync.primary,
                     ),
             ),
-            value: '${pokemons[i]}'),
+            value: pokemons[i][0].toString()),
       );
     }
     online_offline.setstatus(true);
-    progress prag = progress();
+    // progress prag = progress();
 
     //activity
     FGBGEvents.stream.listen((event) {
@@ -103,8 +115,8 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
       // FGBGType.foreground or FGBGType.background
     });
 
-    prag.get_firebase_progress();
-    progress_list = prag.progress_get();
+    // prag.get_firebase_progress();
+    // progress_list = prag.progress_get();
     _currentUser = widget.user;
 
     CollectionReference users = FirebaseFirestore.instance.collection('user');
@@ -132,9 +144,8 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
     }
 
     getFile();
-    var box = Hive.box("LocalDB");
-    lang = box.get("Lang")['Selected_lang']['lang1'];
-    print(lang);
+
+    LangAvail.removeWhere((element) => element.toString() == lang.toString());
 
     super.initState();
   }
@@ -185,6 +196,7 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
             ],
             onTabChange: (value) {
               setState(() {
+                print(box.get("Lang"));
                 _index_body = value;
               });
             },
@@ -246,12 +258,31 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
                                           showCupertinoModalPopup(
                                               context: context,
                                               builder: (context) {
-                                                return RegisterLang(
-                                                  user: widget.user,
-                                                  dync: widget.dync,
-                                                );
+                                                return AdditionalLang(
+                                                    user: widget.user,
+                                                    dync: widget.dync,
+                                                    langAvail: LangAvail);
                                               });
                                           listDropdownController.close();
+                                        } else {
+                                          print(dropdownItem);
+                                          ResourceBrain resourcebrain =
+                                              ResourceBrain();
+                                          resourcebrain
+                                              .additionalangdownloadlang(
+                                                  int.parse(dropdownItem));
+                                          listDropdownController.close();
+
+                                          Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ResourceDownloading(
+                                                user: _currentUser,
+                                                dync: widget.dync,
+                                              ),
+                                            ),
+                                          );
+                                          // }
                                         }
                                       },
                                       resultOptions: ResultOptions(

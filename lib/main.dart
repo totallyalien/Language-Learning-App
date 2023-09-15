@@ -46,8 +46,7 @@ class MyApp extends StatelessWidget {
               useMaterial3: true),
           debugShowCheckedModeBanner: false,
           home: Splash(
-            dync: lightDynamic
-            !,
+            dync: lightDynamic!,
           ),
         );
       },

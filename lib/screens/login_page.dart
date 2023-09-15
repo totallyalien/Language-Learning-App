@@ -33,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
   final _focusPassword = FocusNode();
 
   bool _isProcessing = false;
-  ResourceBrainLogin resourcebrain = ResourceBrainLogin();
 
   Future<void> displayMessage(String message) async {
     await showDialog(
@@ -43,12 +42,13 @@ class _LoginPageState extends State<LoginPage> {
             ));
   }
 
+  ResourceBrain resourceBrain = ResourceBrain();
+
   Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      resourcebrain.initadownload();
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => ResourceDownloading(
@@ -188,9 +188,8 @@ class _LoginPageState extends State<LoginPage> {
           GestureDetector(
             onTap: () async {
               signInWithGoogle().then((value) async {
-                print(value.additionalUserInfo);
                 if (value.user != null) {
-                  resourcebrain.Googledownload(value);
+                  resourceBrain.initaldownloadlang();
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => ResourceDownloading(
@@ -246,8 +245,7 @@ class _LoginPageState extends State<LoginPage> {
           });
 
           if (user != null) {
-            resourcebrain.signindownload();
-
+            resourceBrain.initaldownloadlang();
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => ResourceDownloading(

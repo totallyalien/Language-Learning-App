@@ -116,7 +116,8 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
       if (aa) {
         print("valid");
         setState(() {
-          if (Progress == 1.0) {
+          print(Progress);
+          if (Progress == 0.8) {
             prog.progress_update(2);
             Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (context) => Speaking(

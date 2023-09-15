@@ -5,65 +5,6 @@ import 'package:hive/hive.dart';
 import 'package:translator/translator.dart';
 
 class ResourceBrain {
-  late List<dynamic> Question;
-  late Future<DocumentSnapshot> List_Data;
-
-  var box = Hive.box("LocalDB");
-  CollectionReference dataBase =
-      FirebaseFirestore.instance.collection('DataBase');
-  GoogleTranslator translator = GoogleTranslator();
-
-  Future download(var langsel) async {
-    if (box.isOpen) {
-      List_Data = dataBase.doc('English_Data').get();
-      List_Data.then((value) => box.put("Data_downloaded", value.data()));
-      dataBase
-          .doc('LISTENING')
-          .get()
-          .then((value) => box.put('SPEAKING', value.data()));
-      Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
-
-      Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
-      box.put("Progress", [0, 0, 0, 0]);
-      box.put("Lang", {
-        'Selected_lang': [langsel],
-        'Progress': [0, 0, 0, 0]
-      });
-
-      RawData.forEach((key, value) async {
-        Question = await translatefunction(
-            RawData, key, translator, langsel[1].toString());
-        box.put(key.toString(), Question);
-      });
-
-      SpeakingRawData.forEach((key, value) async {
-        Question = await translatefunction(
-            SpeakingRawData, key, translator, langsel[1].toString());
-        box.put(key.toString(), Question);
-      });
-    }
-  }
-
-  Future addUserdetails(List selectedlang, String email, String name) async {
-    await FirebaseFirestore.instance.collection("user").doc(email).set({
-      'Selected_lang': {"lang1": selectedlang},
-      'Progress': [0, 0, 0, 0],
-      'name': name
-    }).then((value) => printInfo());
-  }
-
-  Future<List> translatefunction(RawData, key, translator, tolang) async {
-    List TempQuestion = RawData[key];
-    for (int i = 0; i < TempQuestion.length; i++) {
-      await translator.translate(TempQuestion[i], to: tolang).then((value) {
-        TempQuestion[i] = value.text;
-      });
-    }
-    return TempQuestion;
-  }
-}
-
-class ResourceBrainLogin {
   var box = Hive.box("LocalDB");
   CollectionReference dataBase =
       FirebaseFirestore.instance.collection('DataBase');
@@ -72,102 +13,103 @@ class ResourceBrainLogin {
   User? user = FirebaseAuth.instance.currentUser;
 
   late List<dynamic> Question;
-  late Future<DocumentSnapshot> List_Data;
 
-  void Googledownload(var value) {
-    if (box.isOpen) {
-      userBase
-          .doc(value.user!.email.toString())
-          .get()
-          .then((value) => box.put("Lang", value.data()));
-      List_Data = dataBase.doc('English_Data').get();
-      List_Data.then((value) => box.put("Data_downloaded", value.data()));
+  Future<void> initaldownloadlang() async {
+    int n = await box.get("current_lang");
 
-      dataBase
-          .doc('LISTENING')
-          .get()
-          .then((value) => box.put('SPEAKING', value.data()));
-      Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
+    userBase.doc(user!.email.toString()).get().then((value) {
+      box.put("Lang", value.data());
+      box.put("count_lang", box.get("Lang")["count_lang"]);
+    });
 
-      box.put("Data_downloaded_check", "true");
-      box.put("Progress", box.get('Lang')['Progress']);
-      Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
-      var lang = box.get("Lang")['Selected_lang'][1];
-      RawData.forEach((key, value) async {
-        Question = await translatefunction(RawData, key, translator, lang[1]);
-        box.put(key.toString(), Question);
-      });
+    dataBase
+        .doc('English_Data')
+        .get()
+        .then((value) => box.put("Data_downloaded", value.data()));
 
-      SpeakingRawData.forEach((key, value) async {
-        Question =
-            await translatefunction(SpeakingRawData, key, translator, lang[1]);
-        box.put(key.toString(), Question);
-      });
-    }
+    dataBase
+        .doc('LISTENING')
+        .get()
+        .then((value) => box.put('SPEAKING', value.data()));
+
+    var lang = box.get("Lang")[n.toString()]['Selected_lang'];
+
+    Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
+    RawData.forEach((key, value) async {
+      Question = await translatefunction(RawData, key, translator, lang[1]);
+      box.put(key.toString(), Question);
+    });
+
+    Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
+    SpeakingRawData.forEach((key, value) async {
+      Question =
+          await translatefunction(SpeakingRawData, key, translator, lang[1]);
+      box.put(key.toString(), Question);
+    });
   }
 
-  void signindownload() async {
-    if (box.isOpen) {
-      userBase
-          .doc(user!.email.toString())
-          .get()
-          .then((value) => box.put("Lang", value.data()));
-      List_Data = dataBase.doc('English_Data').get();
-      List_Data.then((value) => box.put("Data_downloaded", value.data()));
+  Future<void> additionalangdownloadlang(int n) async {
+    userBase.doc(user!.email.toString()).get().then((value) {
+      box.put("Lang", value.data());
+      box.put("count_lang", box.get("Lang")["count_lang"]);
+    });
 
-      dataBase
-          .doc('LISTENING')
-          .get()
-          .then((value) => box.put('SPEAKING', value.data()));
-      Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
+    dataBase
+        .doc('English_Data')
+        .get()
+        .then((value) => box.put("Data_downloaded", value.data()));
 
-      box.put("Data_downloaded_check", "true");
-      box.put("Progress", box.get('Lang')['Progress']);
-      Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
-      var lang = box.get("Lang")['Selected_lang'][1][0];
-      RawData.forEach((key, value) async {
-        Question = await translatefunction(RawData, key, translator, lang[1]);
-        box.put(key.toString(), Question);
-      });
+    dataBase
+        .doc('LISTENING')
+        .get()
+        .then((value) => box.put('SPEAKING', value.data()));
 
-      SpeakingRawData.forEach((key, value) async {
-        Question =
-            await translatefunction(SpeakingRawData, key, translator, lang[1]);
-        box.put(key.toString(), Question);
-      });
-    }
+    var lang = box.get("Lang")[n.toString()]['Selected_lang'];
+    box.put("current_lang", n);
+
+    Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
+    RawData.forEach((key, value) async {
+      Question = await translatefunction(RawData, key, translator, lang[1]);
+      box.put(key.toString(), Question);
+    });
+
+    Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
+    SpeakingRawData.forEach((key, value) async {
+      Question =
+          await translatefunction(SpeakingRawData, key, translator, lang[1]);
+      box.put(key.toString(), Question);
+    });
   }
 
-  void initadownload() {
-    if (box.isOpen) {
-      userBase
-          .doc(user!.email.toString())
-          .get()
-          .then((value) => box.put("Lang", value.data()));
-      List_Data = dataBase.doc('English_Data').get();
-      List_Data.then((value) => box.put("Data_downloaded", value.data()));
+  Future addUserdetails(List selectedlang, String email, String name) async {
+    await FirebaseFirestore.instance.collection("user").doc(email).set({
+      "1": {
+        'Selected_lang': selectedlang,
+        'Progress': [0, 0, 0, 0],
+        'name': name
+      },
+      "count_lang": 1
+    });
+    box.put("current_lang", 1);
+  }
 
-      dataBase
-          .doc('LISTENING')
-          .get()
-          .then((value) => box.put('SPEAKING', value.data()));
-      Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
-      box.put("Progress", box.get('Lang')['Progress']);
-      var lang = box.get("Lang")['Selected_lang']['lang1'];
-      print(lang);
+  Future appendlang(List selectedlang, String email, String name) async {
+    box.put("count_lang", (box.get("count_lang") + 1));
+    await FirebaseFirestore.instance.collection("user").doc(email).update({
+      (box.get("count_lang")).toString(): {
+        'Selected_lang': selectedlang,
+        'Progress': [0, 0, 0, 0],
+        'name': name
+      },
+      "count_lang": (box.get("count_lang"))
+    });
 
-      Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
-      RawData.forEach((key, value) async {
-        Question = await translatefunction(RawData, key, translator, lang[1]);
-        box.put(key.toString(), Question);
-      });
+    this.additionalangdownloadlang(box.get("count_lang"));
 
-      SpeakingRawData.forEach((key, value) async {
-        Question =
-            await translatefunction(SpeakingRawData, key, translator, lang[1]);
-        box.put(key.toString(), Question);
-      });
-    }
+    userBase.doc(user!.email.toString()).get().then((value) {
+      box.put("Lang", value.data());
+      box.put("current_lang", box.get("count_lang"));
+    });
   }
 
   Future<List> translatefunction(RawData, key, translator, tolang) async {
