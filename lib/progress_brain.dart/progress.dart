@@ -36,6 +36,8 @@ class progress {
     userBase.doc(this.user!.email.toString()).get().then((value) {
       box.put("Lang", (value.data()));
     });
-    box.put("Progress", box.get("Lang")['Progress']);
+    print(box.get("Lang"));
+    box.put("Progress",
+        box.get("Lang")[box.get("current_lang").toString()]['Progress']);
   }
 }
