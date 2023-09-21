@@ -92,7 +92,7 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
             icon: Container(
               height: 25,
               width: 25,
-              child: pokemons[i] != " "
+              child: pokemons[i][1] != " "
                   ? SvgPicture.asset("assets/flag/${pokemons[i][1]}.svg")
                   : Icon(
                       Icons.add,
@@ -103,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
       );
     }
     online_offline.setstatus(true);
-    // progress prag = progress();
+    progress prag = progress();
 
     //activity
     FGBGEvents.stream.listen((event) {
@@ -111,12 +111,9 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
       if (event == FGBGType.background) {
         online_offline.setstatus(false);
       }
-
-      // FGBGType.foreground or FGBGType.background
     });
 
-    // prag.get_firebase_progress();
-    // progress_list = prag.progress_get();
+    progress_list = prag.progress_get();
     _currentUser = widget.user;
 
     CollectionReference users = FirebaseFirestore.instance.collection('user');

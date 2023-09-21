@@ -39,7 +39,8 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
   @override
   void initState() {
     var box = Hive.box("LocalDB");
-    lang_code = box.get("Lang")['Selected_lang']['lang1'][1];
+    lang_code =
+        box.get("Lang")[box.get("current_lang").toString()]['Selected_lang'][1];
     List QuestionRawData = box.get(widget.cat);
     List QuestionRawDataUn = box.get('SPEAKING')[widget.cat];
     var pos = 0;

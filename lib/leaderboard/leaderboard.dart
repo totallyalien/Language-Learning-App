@@ -65,13 +65,10 @@ class _leaderboardState extends State<leaderboard> {
                   }
                   var data = snapshot.data!.docs;
 
-                  data.forEachIndexed((index, element) {
-                    data[index].data()["Progress"] = [
-                      data[index].data()["Progress"].fold(0, (e, t) => e + t)
-                    ];
-                  });
+                  ///removed
 
                   List udata = sort_data(data);
+                  print(udata[0].data());
 
                   return ListView.builder(
                       itemCount: udata.length,
@@ -89,14 +86,14 @@ class _leaderboardState extends State<leaderboard> {
                                     : Colors.green
                                 : Colors.transparent,
                             user: user,
-                            name: udata[index].data()["name"],
+                            name: udata[index].data()["1"]["name"],
                             email: udata[index].reference.id,
                             dync: widget.dync,
                             imageurl: udata[index].data()['avtar_url'],
                             index: index,
                             shield: rank_colors[index < 3 ? index : 3],
                             context: context,
-                            rank: udata[index].data()["Progress"][0]);
+                            rank: udata[index].data()["leader_board"]);
                       });
                 }))
       ],
@@ -114,7 +111,7 @@ class _leaderboardState extends State<leaderboard> {
 List sort_data(List liss) {
   for (int i = 0; i < liss.length; i++) {
     for (int j = 0; j <= i; j++) {
-      if (liss[i].data()["Progress"][0] > liss[j].data()["Progress"][0]) {
+      if (liss[i].data()["leader_board"] > liss[j].data()["leader_board"]) {
         var temp = liss[j];
         liss[j] = liss[i];
         liss[i] = temp;

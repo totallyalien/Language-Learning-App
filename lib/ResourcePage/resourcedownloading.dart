@@ -15,8 +15,7 @@ class ResourceBrain {
   late List<dynamic> Question;
 
   Future<void> initaldownloadlang() async {
-    int n = await box.get("current_lang");
-
+    // int n = await box.get("current_lang");
     userBase.doc(user!.email.toString()).get().then((value) {
       box.put("Lang", value.data());
       box.put("count_lang", box.get("Lang")["count_lang"]);
@@ -32,7 +31,7 @@ class ResourceBrain {
         .get()
         .then((value) => box.put('SPEAKING', value.data()));
 
-    var lang = box.get("Lang")[n.toString()]['Selected_lang'];
+    var lang = box.get("Lang")["1"]['Selected_lang'];
 
     Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
     RawData.forEach((key, value) async {
@@ -88,7 +87,8 @@ class ResourceBrain {
         'Progress': [0, 0, 0, 0],
         'name': name
       },
-      "count_lang": 1
+      "count_lang": 1,
+      "leader_board": 0
     });
     box.put("current_lang", 1);
   }

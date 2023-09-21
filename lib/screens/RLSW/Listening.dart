@@ -18,7 +18,8 @@ class listening extends StatefulWidget {
 
 class _listeningState extends State<listening> {
   late Future onetimebuilder;
-  var lang = box.get("Lang")['Selected_lang']["lang1"];
+  var lang =
+      box.get("Lang")[box.get("current_lang").toString()]['Selected_lang'];
 
   @override
   void initState() {

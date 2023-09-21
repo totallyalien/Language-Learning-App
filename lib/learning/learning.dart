@@ -41,8 +41,10 @@ class _questionsUiState extends State<questionsUi> {
   @override
   void initState() {
     Question = box.get(widget.topic);
-    lang = box.get("Lang")['Selected_lang']["lang1"][0];
-    lang_code = box.get("Lang")['Selected_lang']['lang1'][1];
+    lang =
+        box.get("Lang")[box.get("current_lang").toString()]['Selected_lang'][0];
+    lang_code =
+        box.get("Lang")[box.get("current_lang").toString()]['Selected_lang'][1];
 
     Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
 
