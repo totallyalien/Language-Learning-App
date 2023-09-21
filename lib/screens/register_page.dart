@@ -176,32 +176,35 @@ class _RegisterPageState extends State<RegisterPage> {
         });
 
         if (_registerFormKey.currentState!.validate()) {
-          User? user = await FireAuth.registerUsingEmailPassword(
-            name: _nameTextController.text,
-            email: _emailTextController.text,
-            password: _passwordTextController.text,
-          );
+          // User? user = await FireAuth.registerUsingEmailPassword(
+          //   name: _nameTextController.text,
+          //   email: _emailTextController.text,
+          //   password: _passwordTextController.text,
+          // );
 
-          // try {
-          //   await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          //     email: _emailTextController.text,
-          //     password: _passwordTextController.text,
-          //   );
-          // } on FirebaseAuthException catch (e) {
-          //   ScaffoldMessenger.of(context)
-          //       .showSnackBar(SnackBar(content: Text(e.code)));
-          // }
-
-          if (user != null) {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => RegisterLang(
-                  user: user,
-                  dync: widget.dync,
-                ),
-              ),
-              ModalRoute.withName('/'),
+          try {
+            UserCredential user =
+                await FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: _emailTextController.text,
+              password: _passwordTextController.text,
             );
+
+            User? user_ = user.user;
+            await user_!.updateDisplayName(_nameTextController.text);
+
+            if (user_ != null) {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => RegisterLang(
+                    dync: widget.dync,
+                  ),
+                ),
+                ModalRoute.withName('/'),
+              );
+            }
+          } on FirebaseAuthException catch (e) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(e.code)));
           }
 
           setState(() {

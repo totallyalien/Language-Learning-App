@@ -11,6 +11,8 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 
+import '../../writingbrain/writingbrain.dart';
+
 class Writing extends StatefulWidget {
   late ColorScheme dync;
   Writing({required this.dync, super.key});
@@ -21,6 +23,8 @@ class Writing extends StatefulWidget {
 
 class _WritingState extends State<Writing> {
   String headingcheck = "🐧🐧🐧🐧🐧";
+
+  WritingBrain _writingBrain = WritingBrain();
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +76,9 @@ class _WritingState extends State<Writing> {
                 final filePath = '${directory.path}/signature.png';
                 final File file = File(filePath);
                 await file.writeAsBytes(signatureBytes!);
-                
-               
+
+                _writingBrain.extractTextFromImage(
+                    filePath);
               },
               child: Expanded(
                   child: Container(
@@ -94,3 +99,4 @@ class _WritingState extends State<Writing> {
     );
   }
 }
+

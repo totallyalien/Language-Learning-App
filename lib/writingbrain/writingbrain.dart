@@ -1,41 +1,40 @@
 import 'dart:convert';
+import 'package:google_vision/google_vision.dart';
+import 'package:http/http.dart' as http;
 
-class WritingBrain{
+class WritingBrain {
+  Future<void> extractTextFromImage(String imagepath) async {
+    final googleVision = await GoogleVision.withJwt(
+        "assets/client_secret_707723557463-oveiv9r8dqtn31046ncppobph8r16e1v.apps.googleusercontent.com.json");
 
+    final painter = Painter.fromFilePath(imagepath);
 
-Future<String?> extractTextFromImage(String imageUrl, String apiKey) async {
-  final url = 'https://vision.googleapis.com/v1/images:annotate';
-  final headers = {'Content-Type': 'application/json'};
-  final requestBody = {
-    'requests': [
-      {
-        'image': {'source': {'imageUri': imageUrl}},
-        'features': [{'type': 'TEXT_DETECTION'}],
+    final requests = AnnotationRequests(requests: [
+      AnnotationRequest(
+          image: Image(painter: painter),
+          features: [Feature(maxResults: 10, type: 'TEXT_DETECTION')])
+    ]);
+
+    print('checking...');
+
+    AnnotatedResponses annotatedResponses =
+        await googleVision.annotate(requests: requests);
+
+    print('done.\n');
+
+    for (var annotatedResponse in annotatedResponses.responses) {
+      for (var textAnnotation in annotatedResponse.textAnnotations) {
+        GoogleVision.drawText(
+            painter,
+            textAnnotation.boundingPoly!.vertices.first.x + 2,
+            textAnnotation.boundingPoly!.vertices.first.y + 2,
+            textAnnotation.description);
+
+        GoogleVision.drawAnnotations(
+            painter, textAnnotation.boundingPoly!.vertices);
       }
-    ]
-  };
-
-  try {
-    final response = await http.post(
-      Uri.parse('$url?key=$apiKey'),
-      headers: headers,
-      body: jsonEncode(requestBody),
-    );
-
-    if (response.statusCode == 200) {
-      final decodedResponse = jsonDecode(response.body);
-      if (decodedResponse['responses'][0]['textAnnotations'] != null) {
-        return decodedResponse['responses'][0]['textAnnotations'][0]['description'];
-      } else {
-        return null;
-      }
-    } else {
-      throw Exception('Failed to extract text. Status code: ${response.statusCode}');
     }
-  } catch (e) {
-    throw Exception('Failed to extract text: $e');
+
+    // await painter.writeAsJpeg('example/debugImage.jpg');
   }
-}
-
-
 }

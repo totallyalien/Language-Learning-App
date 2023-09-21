@@ -31,14 +31,14 @@ class progress {
     });
   }
 
-  void get_firebase_progress() {
+  void get_firebase_progress() async{
     CollectionReference userBase =
         FirebaseFirestore.instance.collection('user');
     userBase.doc(this.user!.email.toString()).get().then((value) {
       box.put("Lang", (value.data()));
     });
-    print(box.get("Lang"));
+    print(box.get("Lang").toString() + box.get("current_lang").toString());
     box.put("Progress",
-        box.get("Lang")[box.get("current_lang").toString()]['Progress']);
+       await box.get("Lang")[box.get("current_lang").toString()]['Progress']);
   }
 }

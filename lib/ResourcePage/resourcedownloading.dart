@@ -15,10 +15,12 @@ class ResourceBrain {
   late List<dynamic> Question;
 
   Future<void> initaldownloadlang() async {
-    // int n = await box.get("current_lang");
-    userBase.doc(user!.email.toString()).get().then((value) {
-      box.put("Lang", value.data());
-      box.put("count_lang", box.get("Lang")["count_lang"]);
+    box.put("current_lang", 1);
+
+    await userBase.doc(user!.email.toString()).get().then((value) async {
+      await box.put("Lang", value.data());
+      await box.put("count_lang", await box.get("Lang")["count_lang"]);
+      print(await box.get("Lang")["count_lang"]);
     });
 
     dataBase
@@ -31,7 +33,9 @@ class ResourceBrain {
         .get()
         .then((value) => box.put('SPEAKING', value.data()));
 
-    var lang = box.get("Lang")["1"]['Selected_lang'];
+
+    var lang = await box.get("Lang")!["1"]['Selected_lang'];
+    print(lang);
 
     Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
     RawData.forEach((key, value) async {
@@ -62,8 +66,7 @@ class ResourceBrain {
         .doc('LISTENING')
         .get()
         .then((value) => box.put('SPEAKING', value.data()));
-
-    var lang = box.get("Lang")[n.toString()]['Selected_lang'];
+    var lang = await box.get("Lang")[n.toString()]['Selected_lang'];
     box.put("current_lang", n);
 
     Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
@@ -80,12 +83,12 @@ class ResourceBrain {
     });
   }
 
-  Future addUserdetails(List selectedlang, String email, String name) async {
+  Future addUserdetails(List selectedlang, String email) async {
     await FirebaseFirestore.instance.collection("user").doc(email).set({
       "1": {
         'Selected_lang': selectedlang,
         'Progress': [0, 0, 0, 0],
-        'name': name
+        'name': user?.displayName.toString()
       },
       "count_lang": 1,
       "leader_board": 0
@@ -104,11 +107,10 @@ class ResourceBrain {
       "count_lang": (box.get("count_lang"))
     });
 
-    this.additionalangdownloadlang(box.get("count_lang"));
-
     userBase.doc(user!.email.toString()).get().then((value) {
       box.put("Lang", value.data());
       box.put("current_lang", box.get("count_lang"));
+      additionalangdownloadlang(box.get("current_lang"));
     });
   }
 

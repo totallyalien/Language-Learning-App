@@ -10,10 +10,9 @@ import 'package:langapp/screens/profile_page.dart';
 import '../ResourcePage/resourcedownloading.dart';
 
 class RegisterLang extends StatefulWidget {
-  final User user;
   late ColorScheme dync;
 
-  RegisterLang({required this.user, required this.dync});
+  RegisterLang({required this.dync});
 
   @override
   _RegisterLang createState() => _RegisterLang();
@@ -40,7 +39,7 @@ class _RegisterLang extends State<RegisterLang> {
 
   @override
   void initState() {
-    _currentUser = widget.user;
+    _currentUser = FirebaseAuth.instance.currentUser!;
     super.initState();
   }
 
@@ -103,21 +102,19 @@ class _RegisterLang extends State<RegisterLang> {
                                             ResourceBrain();
                                         await resourcebrain.addUserdetails(
                                             LangAvail[selected],
-                                            _currentUser.email.toString(),
-                                            _currentUser.displayName
-                                                .toString());
-                                        if (true) {
-                                          resourcebrain.initaldownloadlang();
-                                          Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ResourceDownloading(
-                                                user: _currentUser,
-                                                dync: widget.dync,
-                                              ),
+                                            _currentUser.email.toString());
+                                        await resourcebrain
+                                            .initaldownloadlang();
+
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ResourceDownloading(
+                                              user: _currentUser,
+                                              dync: widget.dync,
                                             ),
-                                          );
-                                        }
+                                          ),
+                                        );
                                       },
                                       child: AbsorbPointer(
                                         child: Container(

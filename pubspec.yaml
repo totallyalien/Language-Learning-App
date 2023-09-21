@@ -56,6 +56,7 @@ dependencies:
   http: ^0.13.6
   google_vision: ^1.0.7+7
   flutter_svg: ^2.0.5
+  googleapis_auth: ^1.4.1
 
 
 dev_dependencies:
@@ -70,7 +71,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    - assets/tessdata/
     - assets/flag/
   fonts:
     - family: Ubuntu

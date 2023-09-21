@@ -81,8 +81,8 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
     var box = Hive.box("LocalDB");
     int n = box.get("current_lang");
     lang = box.get("Lang")[n.toString()]["Selected_lang"];
-
-    for (var i = 1; i <= box.get("count_lang"); i++) {
+    print(box.get("Lang"));
+    for (var i = 1; i <= box.get("Lang")["count_lang"]; i++) {
       pokemons.add([i, box.get("Lang")[i.toString()]["Selected_lang"][2]]);
     }
     for (var i = 0; i < pokemons.length; i++) {
