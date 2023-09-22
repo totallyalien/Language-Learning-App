@@ -40,7 +40,10 @@ class _questionsUiState extends State<questionsUi> {
 
   @override
   void initState() {
+    print(box.get("Data_downloaded"));
+
     Question = box.get(widget.topic);
+
     lang =
         box.get("Lang")[box.get("current_lang").toString()]['Selected_lang'][0];
     lang_code =

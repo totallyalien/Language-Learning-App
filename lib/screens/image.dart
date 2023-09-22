@@ -7,7 +7,6 @@ import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:langapp/screens/login_page.dart';
-import 'package:langapp/update_profile_screen.dart';
 import 'package:langapp/utils/fire_auth.dart';
 import 'package:path/path.dart';
 import 'package:flutter/material.dart';
@@ -211,7 +210,10 @@ class _ImageUploadsState extends State<ImageUploads> {
             SizedBox(
               width: 200,
               child: ElevatedButton(
-                onPressed: () => Get.to(() => const UpdateProfileScreen()),
+                onPressed: (){
+                  //
+                },
+                // onPressed: () => Get.to(() => const UpdateProfileScreen()),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: widget.dync.primaryContainer,
                   side: BorderSide.none,
@@ -380,160 +382,3 @@ class ProfileTile extends StatelessWidget {
   }
 }
 
-// Scaffold(
-//       backgroundColor: widget.dync.primary,
-//       body: Column(
-//         mainAxisAlignment: MainAxisAlignment.start,
-//         children: <Widget>[
-//           Container(
-//             height: MediaQuery.of(context).size.height / 3.5,
-//             width: double.infinity,
-//             decoration: BoxDecoration(
-//                 color: widget.dync.primaryContainer,
-//                 borderRadius: BorderRadius.only(
-//                     bottomLeft: Radius.circular(60),
-//                     bottomRight: Radius.circular(60))),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 GestureDetector(
-//                     onTap: () {
-//                       _showPicker(context);
-//                     },
-//                     child: widget.dphoto != null
-//                         ? Container(
-//                             child: Padding(
-//                               padding: const EdgeInsets.all(10),
-//                               child: ClipRRect(
-//                                 borderRadius:
-//                                     BorderRadius.all(Radius.circular(100)),
-//                                 child: Image.memory(
-//                                   widget.dphoto,
-//                                   fit: BoxFit.cover,
-//                                 ),
-//                               ),
-//                             ),
-//                             height: MediaQuery.of(context).size.height / 6,
-//                             width: MediaQuery.of(context).size.height / 6,
-//                           )
-//                         : Container(
-//                             child: Padding(
-//                               padding: const EdgeInsets.all(10),
-//                               child: ClipRRect(
-//                                   borderRadius:
-//                                       BorderRadius.all(Radius.circular(100)),
-//                                   child: Container(
-//                                       color: widget.dync.primary,
-//                                       child: Icon(Icons.camera_alt))),
-//                             ),
-//                             height: MediaQuery.of(context).size.height / 6,
-//                             width: MediaQuery.of(context).size.height / 6,
-//                           )),
-//                 Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     Text(
-//                       widget.user.displayName.toString(),
-//                       style: TextStyle(
-//                           color: widget.dync.primary,
-//                           fontSize: 20,
-//                           fontWeight: FontWeight.bold),
-//                     ),
-//                     Text(
-//                       widget.lang,
-//                       style: TextStyle(
-//                           color: widget.dync.primary,
-//                           fontSize: 14,
-//                           fontWeight: FontWeight.bold),
-//                     ),
-//                   ],
-//                 )
-//               ],
-//             ),
-//           ),
-
-//           // widget.user.emailVerified
-//           //     ? Text(
-//           //         'Email verified ',
-//           //         style: TextStyle(color: Colors.green),
-//           //       )
-//           //     : GestureDetector(
-//           //         onTap: () async {
-//           //           setState(() {
-//           //             _isSendingVerification = true;
-//           //           });
-//           //           await widget.user.sendEmailVerification();
-//           //           setState(() {
-//           //             _isSendingVerification = false;
-//           //           });
-//           //         },
-//           //         child: Text(
-//           //           'Email not verified ? Tap to verify',
-//           //           style: TextStyle(color: Colors.red),
-//           //         ),
-//           //       ),
-
-//           // SizedBox(height: 16.0),
-//           // _isSendingVerification
-//           //     ? CircularProgressIndicator()
-//           //     : Row(
-//           //         mainAxisSize: MainAxisSize.min,
-//           //         children: [
-//           //           SizedBox(width: 8.0),
-//           //           IconButton(
-//           //             icon: Icon(Icons.refresh),
-//           //             onPressed: () async {
-//           //               User? user = await FireAuth.refreshUser(widget.user);
-
-//           //               if (user != null) {
-//           //                 setState(() {
-//           //                   widget.user = user;
-//           //                 });
-//           //               }
-//           //             },
-//           //           ),
-//           //         ],
-//           //       ),
-
-//           SizedBox(height: 10.0),
-//           _isSigningOut
-//               ? CircularProgressIndicator()
-//               : GestureDetector(
-//                   onTap: () async {
-//                     setState(() {
-//                       _isSigningOut = true;
-//                     });
-//                     await FirebaseAuth.instance.signOut();
-
-//                     setState(() {
-//                       _isSigningOut = false;
-//                     });
-//                     Navigator.of(context).pushReplacement(
-//                       MaterialPageRoute(
-//                         builder: (context) => LoginPage(
-//                           dync: widget.dync,
-//                         ),
-//                       ),
-//                     );
-//                   },
-//                   child: Center(
-//                     child: Container(
-//                       child: Center(
-//                         child: Text(
-//                           'Sign out',
-//                           style: TextStyle(color: widget.dync.inversePrimary),
-//                         ),
-//                       ),
-//                       decoration: BoxDecoration(
-//                           color: widget.dync.onTertiaryContainer,
-//                           borderRadius: BorderRadius.all(Radius.circular(10))),
-//                       height: 40,
-//                       width: 150,
-//                     ),
-//                   ),
-//                 ),
-//         ],
-//       ),
-//     );

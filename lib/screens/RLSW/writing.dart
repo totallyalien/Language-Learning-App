@@ -8,9 +8,6 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'dart:ui' as ui;
 import 'package:path_provider/path_provider.dart';
-
-import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
-
 import '../../writingbrain/writingbrain.dart';
 
 class Writing extends StatefulWidget {
@@ -64,21 +61,22 @@ class _WritingState extends State<Writing> {
           ),
           GestureDetector(
               onTap: () async {
-                final signatureImage =
-                    await _signaturePadKey.currentState?.toImage();
-                final ByteData? byteData = await signatureImage?.toByteData(
-                    format: ui.ImageByteFormat.png);
-                final Uint8List? signatureBytes =
-                    byteData?.buffer.asUint8List();
+                _signaturePadKey.currentState!.clear();
+                // final signatureImage =
+                //     await _signaturePadKey.currentState?.toImage();
+                // final ByteData? byteData = await signatureImage?.toByteData(
+                //     format: ui.ImageByteFormat.png);
+                // final Uint8List? signatureBytes =
+                //     byteData?.buffer.asUint8List();
 
-                // Save the signature image to the device's local storage
-                final directory = await getApplicationDocumentsDirectory();
-                final filePath = '${directory.path}/signature.png';
-                final File file = File(filePath);
-                await file.writeAsBytes(signatureBytes!);
+                // // Save the signature image to the device's local storage
+                // final directory = await getApplicationDocumentsDirectory();
+                // final filePath = '${directory.path}/signature.png';
+                // final File file = File(filePath);
+                // await file.writeAsBytes(signatureBytes!);
 
-                _writingBrain.extractTextFromImage(
-                    filePath);
+                // _writingBrain.extractTextFromImage(
+                //     filePath);
               },
               child: Expanded(
                   child: Container(
@@ -89,7 +87,7 @@ class _WritingState extends State<Writing> {
                     color: widget.dync.inversePrimary),
                 child: Center(
                   child: Text(
-                    "Check",
+                    "Clear",
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ),
@@ -99,4 +97,3 @@ class _WritingState extends State<Writing> {
     );
   }
 }
-

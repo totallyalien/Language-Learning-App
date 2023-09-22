@@ -13,24 +13,17 @@ dependencies:
   firebase_core: ^2.15.0
   flutter:
     sdk: flutter
-  google_fonts: ^4.0.4
   shared_preferences: ^2.2.0
-  smooth_page_indicator: ^1.1.0
   animated_text_kit: ^4.2.2
   cloud_firestore: ^4.8.4
   animate_do: ^3.0.2
   google_nav_bar: ^5.0.6
-  hand_signature: ^3.0.1
-  flutter_signature_pad: ^3.0.1
-  path_drawing: ^1.0.1
   flutter_staggered_grid_view: ^0.7.0
-  glassmorphism: ^3.0.0
   percent_indicator: ^4.2.3
   translator: ^0.1.7
   hive: ^2.2.3
   hive_flutter: 
   lottie: ^2.3.2
-  webview_flutter: ^4.2.2
   text_to_speech: ^0.2.3
   speech_to_text: ^6.1.1
   permission_handler: ^10.4.3
@@ -43,16 +36,12 @@ dependencies:
   firebase_storage: ^11.2.6
   google_sign_in: ^6.1.4
   image_picker: ^1.0.2
-  noise_meter: ^3.2.0
   cool_dropdown: ^2.1.0
-  blobs: ^2.0.0
   provider: ^6.0.5
   get: ^4.6.5
   line_icons: ^2.0.3
   url_launcher: ^6.1.11
-  flutter_tesseract_ocr: ^0.4.23
   timeago: ^3.3.0
-  flutter_fgbg: ^0.3.0
   http: ^0.13.6
   google_vision: ^1.0.7+7
   flutter_svg: ^2.0.5
@@ -75,7 +64,7 @@ flutter:
   fonts:
     - family: Ubuntu
       fonts:
-        - asset: assets/UbuntuMono-Regular.ttf
+        - asset: assets/Rubik-Regular.ttf
 
 
 

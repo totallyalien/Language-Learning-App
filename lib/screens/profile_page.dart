@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:langapp/ResourcePage/Resource.dart';
 import 'package:langapp/ResourcePage/additionallang.dart';
@@ -23,6 +22,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../ResourcePage/resourcedownloading.dart';
+import '../translator/translator_ui.dart';
 import 'RLSW/Reading.dart';
 import 'RLSW/Listening.dart';
 import 'RLSW/Speaking.dart';
@@ -32,7 +32,6 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_fgbg/flutter_fgbg.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -73,8 +72,6 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
   late List progress_list;
 
   //activity
-  Activity online_offline = Activity();
-  late StreamSubscription<FGBGType> subscription;
 
   @override
   void initState() {
@@ -102,16 +99,9 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
             value: pokemons[i][0].toString()),
       );
     }
-    online_offline.setstatus(true);
     progress prag = progress();
 
     //activity
-    FGBGEvents.stream.listen((event) {
-      print(event);
-      if (event == FGBGType.background) {
-        online_offline.setstatus(false);
-      }
-    });
 
     progress_list = prag.progress_get();
     _currentUser = widget.user;
@@ -175,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
           child: GNav(
             duration: Duration(milliseconds: 1000),
             tabBorderRadius: 20,
-            tabMargin: EdgeInsets.all(8),
+            tabMargin: EdgeInsets.all(3),
             color: widget.dync.primary,
             tabBackgroundColor: widget.dync.primary,
             activeColor: Colors.white,
@@ -186,6 +176,9 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
               ),
               GButton(
                 icon: Icons.leaderboard,
+              ),
+              GButton(
+                icon: Icons.translate,
               ),
               GButton(
                 icon: Icons.settings,
@@ -223,8 +216,8 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
                                         "Hello ${(_currentUser.displayName.toString())},",
                                         style: TextStyle(
                                             fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: widget.dync.inversePrimary),
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.white),
                                         textAlign: TextAlign.left,
                                       ),
                                     ),
@@ -235,7 +228,7 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
                                             fontSize: 50,
                                             height: 1,
                                             fontWeight: FontWeight.bold,
-                                            color: widget.dync.inversePrimary),
+                                            color: Colors.white),
                                         textAlign: TextAlign.left,
                                       ),
                                     ),
@@ -445,6 +438,7 @@ class _ProfilePageState extends State<ProfilePage> with WidgetsBindingObserver {
               leaderboard(
                 dync: widget.dync,
               ),
+              TranslatorScreen(dync: widget.dync),
               ImageUploads(
                 dync: widget.dync,
                 user: widget.user,

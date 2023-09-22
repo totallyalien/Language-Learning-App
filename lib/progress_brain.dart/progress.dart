@@ -22,23 +22,28 @@ class progress {
 
   void update_firebase() {
     List last_prog = box.get("Progress");
+
     CollectionReference userBase =
         FirebaseFirestore.instance.collection('user');
+
     userBase.doc(this.user!.email.toString()).update({
       'Selected_lang': box.get("Lang")['Selected_lang'],
       'Progress': last_prog,
+      'leader_board': box.get("Lang")['leader_board'] + 1
       //;eader/////******* */
     });
   }
 
-  void get_firebase_progress() async{
+  void get_firebase_progress() async {
     CollectionReference userBase =
         FirebaseFirestore.instance.collection('user');
-    userBase.doc(this.user!.email.toString()).get().then((value) {
+    userBase.doc(this.user!.email.toString()).get().then((value) async {
       box.put("Lang", (value.data()));
+      print(box.get("Lang").toString() + box.get("current_lang").toString());
+      box.put(
+          "Progress",
+          await box.get("Lang")[box.get("current_lang").toString()]
+              ['Progress']);
     });
-    print(box.get("Lang").toString() + box.get("current_lang").toString());
-    box.put("Progress",
-       await box.get("Lang")[box.get("current_lang").toString()]['Progress']);
   }
 }

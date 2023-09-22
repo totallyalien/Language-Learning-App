@@ -18,7 +18,7 @@ class _ReadingState extends State<Reading> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: widget.dync.onSecondaryContainer,
+      backgroundColor: widget.dync.primaryContainer,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -28,8 +28,10 @@ class _ReadingState extends State<Reading> {
               child: Center(
                 child: Text(
                   "Reading",
-                  style:
-                      TextStyle(color: widget.dync.onSecondary, fontSize: 30),
+                  style: TextStyle(
+                      color: widget.dync.secondaryContainer,
+                      fontSize: 34,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               color: widget.dync.primary,
@@ -59,7 +61,7 @@ class _ReadingState extends State<Reading> {
                               Container(
                                   margin: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                      color: widget.dync.primaryContainer,
+                                      color: widget.dync.background,
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(30))),
                                   width: double.infinity,
@@ -79,9 +81,9 @@ class _ReadingState extends State<Reading> {
                                 child: Container(
                                     margin: EdgeInsets.all(10),
                                     decoration: BoxDecoration(
-                                        color: widget.dync.primaryContainer,
+                                        color: widget.dync.primary,
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(30))),
+                                            Radius.circular(10))),
                                     width: double.infinity,
                                     height:
                                         MediaQuery.of(context).size.height / 10,
@@ -92,18 +94,18 @@ class _ReadingState extends State<Reading> {
                         : Container(
                             margin: EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: widget.dync.primaryContainer,
+                                color: widget.dync.primary,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(30))),
+                                    BorderRadius.all(Radius.circular(10))),
                             width: double.infinity,
                             height: MediaQuery.of(context).size.height / 10,
                             child: Center(
                               child: Text(
                                 categories[index],
                                 style: TextStyle(
-                                    color: widget.dync.secondary,
+                                    color: widget.dync.secondaryContainer,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 17),
+                                    fontSize: 20),
                               ),
                             )),
                   );

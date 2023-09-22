@@ -38,7 +38,7 @@ class _IndProgressState extends State<IndProgress> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: widget.dync.onSecondaryContainer,
+        backgroundColor: widget.dync.secondaryContainer,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -46,8 +46,10 @@ class _IndProgressState extends State<IndProgress> {
               child: Center(
                 child: Text(
                   widget.data,
-                  style:
-                      TextStyle(color: widget.dync.onSecondary, fontSize: 25),
+                  style: TextStyle(
+                      color: widget.dync.secondaryContainer,
+                      fontSize: 34,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               height: MediaQuery.of(context).size.height / 4,
@@ -82,14 +84,14 @@ class _IndProgressState extends State<IndProgress> {
                                   height:
                                       MediaQuery.of(context).size.height / 5,
                                   decoration: BoxDecoration(
-                                      color: widget.dync.primaryContainer,
+                                      color: widget.dync.primary,
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(20))),
                                   child: Center(
                                     child: Text(
                                       Vocabulary[Index],
                                       style: TextStyle(
-                                          color: widget.dync.secondary,
+                                          color: widget.dync.inversePrimary,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 17),
                                       textAlign: TextAlign.center,
@@ -97,21 +99,26 @@ class _IndProgressState extends State<IndProgress> {
                                   ),
                                 ),
                                 Opacity(
-                                  opacity: 0.9,
+                                  opacity: 0.5,
                                   child: Container(
                                     margin: EdgeInsets.all(10),
                                     height:
                                         MediaQuery.of(context).size.height / 5,
                                     decoration: BoxDecoration(
-                                        color: widget.dync.primaryContainer,
+                                        color: widget.dync.onPrimaryContainer,
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(20))),
-                                    child: Center(
-                                        child: Icon(
-                                      Icons.lock,
-                                      size: 30,
-                                      color: widget.dync.primary,
-                                    )),
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 50),
+                                      child: Align(
+                                          alignment: Alignment.center,
+                                          child: Icon(
+                                            Icons.lock,
+                                            size: 25,
+                                            color: widget.dync.primaryContainer,
+                                          )),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -121,6 +128,8 @@ class _IndProgressState extends State<IndProgress> {
                               height: MediaQuery.of(context).size.height / 5,
                               decoration: BoxDecoration(
                                   color: widget.dync.primaryContainer,
+                                  border: Border.all(
+                                      color: widget.dync.primary, width: 2),
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20))),
                               child: Center(

@@ -16,38 +16,35 @@ class ResourceBrain {
 
   Future<void> initaldownloadlang() async {
     box.put("current_lang", 1);
-
     await userBase.doc(user!.email.toString()).get().then((value) async {
       await box.put("Lang", value.data());
       await box.put("count_lang", await box.get("Lang")["count_lang"]);
       print(await box.get("Lang")["count_lang"]);
     });
-
-    dataBase
-        .doc('English_Data')
-        .get()
-        .then((value) => box.put("Data_downloaded", value.data()));
-
-    dataBase
-        .doc('LISTENING')
-        .get()
-        .then((value) => box.put('SPEAKING', value.data()));
-
-
     var lang = await box.get("Lang")!["1"]['Selected_lang'];
-    print(lang);
 
-    Map<dynamic, dynamic> RawData = box.get("Data_downloaded");
-    RawData.forEach((key, value) async {
-      Question = await translatefunction(RawData, key, translator, lang[1]);
-      box.put(key.toString(), Question);
+    dataBase.doc('English_Data').get().then((value) {
+      box.put("Data_downloaded", value.data());
+      print(value.data());
+      Map<dynamic, dynamic> RawData = value.data() as Map<dynamic, dynamic>;
+      RawData.forEach((key, value) async {
+        Question = await translatefunction(RawData, key, translator, lang[1]);
+        box.put(key.toString(), Question);
+      });
     });
 
-    Map<dynamic, dynamic> SpeakingRawData = box.get("SPEAKING");
-    SpeakingRawData.forEach((key, value) async {
-      Question =
-          await translatefunction(SpeakingRawData, key, translator, lang[1]);
-      box.put(key.toString(), Question);
+    dataBase.doc('LISTENING').get().then((value) {
+      box.put('SPEAKING', value.data());
+            print(value.data());
+
+      Map<dynamic, dynamic> SpeakingRawData =
+          value.data() as Map<dynamic, dynamic>;
+
+      SpeakingRawData.forEach((key, value) async {
+        Question =
+            await translatefunction(SpeakingRawData, key, translator, lang[1]);
+        box.put(key.toString(), Question);
+      });
     });
   }
 

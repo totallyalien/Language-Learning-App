@@ -12,7 +12,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'screens/login_page.dart';
 import 'Splash/inital.dart';
 import 'package:provider/provider.dart';
-
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox("LocalDB");
@@ -92,4 +91,3 @@ class SplashState extends State<Splash> with AfterLayoutMixin<Splash> {
     );
   }
 }
-

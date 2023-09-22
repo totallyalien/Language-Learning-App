@@ -33,6 +33,7 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
   final translator = GoogleTranslator();
 
   int x = 0;
+  bool islist = false;
   late String lang_code;
   progress prog = progress();
 
@@ -224,6 +225,7 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
+                        print(trcode[lang_code].toString());
                         flutterTts.setLanguage(trcode[lang_code].toString());
                         flutterTts.speak(Questions[x][1]);
                       },
@@ -244,8 +246,15 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        _textController.text = "";
-                        _startListening();
+                        setState(() {
+                          islist = islist ? false : true;
+                          if (!islist) {
+                            _stopListening();
+                          } else {
+                            _textController.text = "";
+                            _startListening();
+                          }
+                        });
                       },
                       child: Container(
                         margin: EdgeInsets.all(15),
@@ -255,7 +264,7 @@ class _SpeakingLearningState extends State<SpeakingLearning> {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         child: Icon(
-                          Icons.mic,
+                          islist ? Icons.cancel : Icons.mic,
                           color: widget.dync.primary,
                         ),
                       ),

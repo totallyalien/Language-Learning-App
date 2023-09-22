@@ -33,7 +33,7 @@ class _SpeakingState extends State<Speaking> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: widget.dync.primary,
+      backgroundColor: widget.dync.primaryContainer,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -43,10 +43,13 @@ class _SpeakingState extends State<Speaking> {
               child: Center(
                 child: Text(
                   "Speaking",
-                  style: TextStyle(color: widget.dync.primary, fontSize: 30),
+                  style: TextStyle(
+                      color: widget.dync.primaryContainer,
+                      fontSize: 34,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
-              color: widget.dync.secondaryContainer,
+              color: widget.dync.primary,
               height: MediaQuery.of(context).size.height / 3.5,
             ),
           ),
@@ -70,16 +73,18 @@ class _SpeakingState extends State<Speaking> {
                         ? Container(
                             margin: EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: widget.dync.primaryContainer,
+                                color: widget.dync.primary,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(30))),
+                                    BorderRadius.all(Radius.circular(10))),
                             width: double.infinity,
                             height: MediaQuery.of(context).size.height / 10,
                             child: Center(
                               child: Text(
                                 speakingcatg[index],
                                 style: TextStyle(
-                                    color: widget.dync.primary, fontSize: 18),
+                                    color: widget.dync.secondaryContainer,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ))
                         : Stack(
@@ -87,9 +92,9 @@ class _SpeakingState extends State<Speaking> {
                               Container(
                                   margin: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                      color: widget.dync.primaryContainer,
+                                      color: widget.dync.primary,
                                       borderRadius: BorderRadius.all(
-                                          Radius.circular(30))),
+                                          Radius.circular(10))),
                                   width: double.infinity,
                                   height:
                                       MediaQuery.of(context).size.height / 10,
@@ -97,20 +102,24 @@ class _SpeakingState extends State<Speaking> {
                                     child: Text(
                                       speakingcatg[index],
                                       style: TextStyle(
-                                          color: widget.dync.primary,
+                                          fontWeight: FontWeight.bold,
+                                          color: widget.dync.primaryContainer,
                                           fontSize: 18),
                                     ),
                                   )),
-                              Container(
-                                  margin: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      color: widget.dync.primaryContainer,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(30))),
-                                  width: double.infinity,
-                                  height:
-                                      MediaQuery.of(context).size.height / 10,
-                                  child: Center(child: Icon(Icons.lock))),
+                              Opacity(
+                                opacity: 0.8,
+                                child: Container(
+                                    margin: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                        color: widget.dync.primary,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    width: double.infinity,
+                                    height:
+                                        MediaQuery.of(context).size.height / 10,
+                                    child: Center(child: Icon(Icons.lock))),
+                              ),
                             ],
                           ),
                   );

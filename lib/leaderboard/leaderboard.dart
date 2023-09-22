@@ -9,6 +9,8 @@ import 'package:collection/collection.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:langapp/chatroom/chartui.dart';
 
+import '../chatroom/activity.dart';
+
 class leaderboard extends StatefulWidget {
   late ColorScheme dync;
   leaderboard({required this.dync, super.key});
@@ -23,9 +25,20 @@ class _leaderboardState extends State<leaderboard> {
     // TODO: implement initState
     super.initState();
 
+    print("object");
+
     firebase_storage.FirebaseStorage storage =
         firebase_storage.FirebaseStorage.instance;
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    online_offline.setstatus(false);
+  }
+
+  Activity online_offline = Activity();
 
   User? user = FirebaseAuth.instance.currentUser;
 
@@ -42,7 +55,8 @@ class _leaderboardState extends State<leaderboard> {
           child: Center(
               child: Text(
             "Leaderboard",
-            style: TextStyle(fontSize: 30, color: Colors.white),
+            style: TextStyle(
+                fontSize: 34, color: Colors.white, fontWeight: FontWeight.bold),
           )),
           height: MediaQuery.of(context).size.height / 10,
         ),
@@ -66,9 +80,11 @@ class _leaderboardState extends State<leaderboard> {
                   var data = snapshot.data!.docs;
 
                   ///removed
+                  if (snapshot.hasData) {
+                    online_offline.setstatus(true);
+                  }
 
                   List udata = sort_data(data);
-                  print(udata[0].data());
 
                   return ListView.builder(
                       itemCount: udata.length,
@@ -153,6 +169,12 @@ GestureDetector leadcont(
                   user!.displayName!.toLowerCase().toString())
               ? dync.primaryContainer
               : Colors.white,
+          border: Border.all(
+              color: (name.toString().toLowerCase() !=
+                      user!.displayName!.toLowerCase().toString())
+                  ? dync.primaryContainer
+                  : Colors.white,
+              width: 3),
           borderRadius: BorderRadius.all(Radius.circular(10))),
       child: Padding(
         padding: const EdgeInsets.all(8.0),

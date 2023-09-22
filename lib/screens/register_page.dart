@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:langapp/admin/insregister.dart';
 import 'package:langapp/screens/initallang.dart';
 import 'package:langapp/screens/login_page.dart';
 import 'package:langapp/utils/fire_auth.dart';
@@ -154,6 +155,27 @@ class _RegisterPageState extends State<RegisterPage> {
                           },
                           child: Text(
                             "Login",
+                            style: TextStyle(
+                                color: Color.fromARGB(200, 139, 61, 241)),
+                          )),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Are you an Instructor ? "),
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterInstructor()),
+                            );
+                          },
+                          child: Text(
+                            "Click here",
                             style: TextStyle(
                                 color: Color.fromARGB(200, 139, 61, 241)),
                           )),
