@@ -34,3 +34,16 @@ To run this app locally, follow these steps:
 
    ```bash
    git clone https://github.com/totallyalien/LangLingualApp.git
+   
+## Contributions
+
+Contributions to this project are welcome! If you find any issues or want to add new features, feel free to open a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+Feel free to use this GitHub description as a starting point for your Language learning app project using Flutter and a dynamic UI. Adjust the features and libraries used to suit your specific implementation. Happy coding!
+
