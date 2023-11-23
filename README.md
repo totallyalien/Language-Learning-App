@@ -33,7 +33,7 @@ To run this app locally, follow these steps:
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/totallyalien/LangLingualApp.git
+   git clone https://github.com/totallyalien/Language-Learning-App
    
 ## Contributions
 
